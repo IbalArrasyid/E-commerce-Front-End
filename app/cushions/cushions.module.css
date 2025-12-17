@@ -1,0 +1,456 @@
+/* Cushions Page Styles */
+
+.cushionsPage {
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section */
+.heroSection {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.heroImage {
+    position: absolute;
+    inset: 0;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+}
+
+.heroContent {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    padding: 0 20px;
+}
+
+.heroTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 48px;
+    font-weight: 400;
+    margin: 0 0 15px;
+    letter-spacing: 2px;
+}
+
+.heroSubtitle {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Intro Section */
+.introSection {
+    padding: 80px 0;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+.sectionTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 25px;
+}
+
+.introText {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Categories Section */
+.categoriesSection {
+    padding: 80px 0;
+}
+
+.categoriesSection .sectionTitle {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.categoriesGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.categoryCard {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    aspect-ratio: 1;
+}
+
+.cardImageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.cardOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 35px;
+    transition: background 0.3s ease;
+}
+
+.categoryCard:hover .cardOverlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4));
+}
+
+.cardTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+    text-align: center;
+    margin: 0 0 8px;
+}
+
+.cardDescription {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    margin: 0 0 18px;
+}
+
+.viewMoreBtn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: transparent;
+    color: #fff;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #fff;
+    transition: all 0.3s ease;
+}
+
+.categoryCard:hover .viewMoreBtn {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Features Section */
+.featuresSection {
+    padding: 80px 0;
+    background-color: #f8f8f8;
+}
+
+.featuresSection .sectionTitle {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.featureCard {
+    text-align: center;
+    padding: 30px 20px;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.featureIcon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 20px;
+    color: #39483f;
+}
+
+.featureIcon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.featureTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    margin: 0 0 12px;
+}
+
+.featureDescription {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666;
+    margin: 0;
+}
+
+/* Custom Section */
+.customSection {
+    padding: 80px 0;
+}
+
+.customGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.customImage {
+    position: relative;
+    height: 450px;
+    overflow: hidden;
+}
+
+.customContent {
+    padding-left: 20px;
+}
+
+.customTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 20px;
+}
+
+.customText {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    margin: 0 0 25px;
+}
+
+.customList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+}
+
+.customList li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 15px;
+    color: #444;
+}
+
+.customList li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #39483f;
+    font-weight: bold;
+}
+
+.customButton {
+    display: inline-block;
+    padding: 14px 35px;
+    background-color: #39483f;
+    color: #fff;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #39483f;
+}
+
+.customButton:hover {
+    background-color: transparent;
+    color: #39483f;
+}
+
+/* CTA Section */
+.ctaSection {
+    padding: 100px 0;
+    background-color: #39483f;
+    text-align: center;
+}
+
+.ctaTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 20px;
+}
+
+.ctaDescription {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+}
+
+.ctaButtons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ctaButton {
+    display: inline-block;
+    padding: 16px 40px;
+    background-color: #fff;
+    color: #39483f;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #fff;
+}
+
+.ctaButton:hover {
+    background-color: transparent;
+    color: #fff;
+}
+
+.ctaButtonOutline {
+    display: inline-block;
+    padding: 16px 40px;
+    background-color: transparent;
+    color: #fff;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 2px solid #fff;
+    transition: all 0.3s ease;
+}
+
+.ctaButtonOutline:hover {
+    background-color: #fff;
+    color: #39483f;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    .featuresGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .heroSection {
+        height: 400px;
+    }
+
+    .heroTitle {
+        font-size: 36px;
+    }
+
+    .categoriesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .customGrid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .customContent {
+        padding-left: 0;
+        order: 1;
+    }
+
+    .customImage {
+        order: -1;
+        height: 350px;
+    }
+
+    .ctaButtons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ctaButton,
+    .ctaButtonOutline {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .heroSection {
+        height: 320px;
+    }
+
+    .heroTitle {
+        font-size: 28px;
+    }
+
+    .sectionTitle {
+        font-size: 24px;
+    }
+
+    .categoriesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .categoryCard {
+        aspect-ratio: 16 / 12;
+    }
+
+    .featuresGrid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .customImage {
+        height: 280px;
+    }
+
+    .ctaSection {
+        padding: 70px 0;
+    }
+}

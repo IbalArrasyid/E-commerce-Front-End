@@ -303,7 +303,7 @@ const BedRoomFurniture = [
 
         {/* Introduction Section */}
         <section className="text-left">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-light tracking-wider mb-4">
                 Discover the Serenity of Bedroom Furniture at Home Decor Indonesia
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
@@ -321,7 +321,7 @@ const BedRoomFurniture = [
         </section>
         
             <section>
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">What Do We Offer?</h3>
+                <h3 className="text-2xl font-light mb-6 text-gray-900">What Do We Offer?</h3>
                 <Accordion
                 items={whatWeOfferItems}
                 variant="luxurious"
@@ -330,7 +330,7 @@ const BedRoomFurniture = [
             </section>
 
             <section>
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">Why Choose us?</h3>
+                <h3 className="text-2xl font-light mb-6 text-gray-900">Why Choose us?</h3>
                 <Accordion
                 items={whyChooseUsItems}
                 variant="luxurious"
@@ -338,13 +338,14 @@ const BedRoomFurniture = [
                 />
             </section>
 
-            <section className="py-16 bg-gray-50">
-                <MostPopularProducts 
-                apiEndpoint="/api/products/popular?categories=bedsets"
-                itemsPerSlide={4}
-                autoPlay={true}
-                />
-            </section>
+                {/* Most Popular Products Section */}
+              <section className="py-16 bg-gray-50">
+                  <MostPopularProducts 
+                    apiEndpoint="/api/products/popular"
+                    itemsPerSlide={4}
+                    autoPlay={true}
+                  />
+              </section>
 
             <section>
                 <h4>Conclusion</h4>

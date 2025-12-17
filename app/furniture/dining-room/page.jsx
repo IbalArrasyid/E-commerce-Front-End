@@ -76,48 +76,48 @@ const DiningRoomFurniture = [
   ]
 
   const DiningRoomHotspots = [
-    {
-      id: 'brooks-swivel-dining-chair',
-      imageIndex: 2,
-      position: { top: '320px', right: '50px' },
-      tooltipPosition: { top: '40px', right: '-70px' },
-      title: 'Brooks Swivel Dining Chair',
-      productImage: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/05/Brooks-Swivel-Leather-Dining-Armchair-1.jpg',
-      description: 'Brown, Silver',
-      pricing: {
-        original: 'Rp 7,020,750',
-        sale: 'Rp 5,967,638'
-      },
-      url: 'https://www.homedecorindonesia.com/product/brooks-swivel-leather-dining-armchair/'
-    },
-    {
-      id: 'dining-table-modern',
-      imageIndex: 0,
-      position: { bottom: '200px', left: '60px' },
-      tooltipPosition: { bottom: '40px', left: '-70px' },
-      title: 'Modern Dining Table',
-      productImage: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/1.-DINING-TABLE.jpg',
-      description: 'Extendable design, Premium wood finish',
-      pricing: {
-        original: 'Rp 15,500,000',
-        sale: 'Rp 12,400,000'
-      },
-      url: 'https://www.homedecorindonesia.com/product/dining-table-modern/'
-    },
-    {
-      id: 'chandelier-modern',
-      imageIndex: 0,
-      position: { top: '80px', right: '100px' },
-      tooltipPosition: { top: '-40px', right: '-70px' },
-      title: 'Modern Chandelier',
-      productImage: 'https://www.homedecorindonesia.com/wp-content/uploads/2024/02/PO-21-600x390.jpg.webp',
-      description: 'LED lighting, Contemporary design',
-      pricing: {
-        original: 'Rp 8,750,000',
-        sale: 'Rp 6,125,000'
-      },
-      url: 'https://www.homedecorindonesia.com/product/chandelier-modern/'
-    }
+    // {
+    //   id: 'brooks-swivel-dining-chair',
+    //   imageIndex: 2,
+    //   position: { top: '320px', right: '50px' },
+    //   tooltipPosition: { top: '40px', right: '-70px' },
+    //   title: 'Brooks Swivel Dining Chair',
+    //   productImage: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/05/Brooks-Swivel-Leather-Dining-Armchair-1.jpg',
+    //   description: 'Brown, Silver',
+    //   pricing: {
+    //     original: 'Rp 7,020,750',
+    //     sale: 'Rp 5,967,638'
+    //   },
+    //   url: 'https://www.homedecorindonesia.com/product/brooks-swivel-leather-dining-armchair/'
+    // },
+    // {
+    //   id: 'dining-table-modern',
+    //   imageIndex: 0,
+    //   position: { bottom: '200px', left: '60px' },
+    //   tooltipPosition: { bottom: '40px', left: '-70px' },
+    //   title: 'Modern Dining Table',
+    //   productImage: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/1.-DINING-TABLE.jpg',
+    //   description: 'Extendable design, Premium wood finish',
+    //   pricing: {
+    //     original: 'Rp 15,500,000',
+    //     sale: 'Rp 12,400,000'
+    //   },
+    //   url: 'https://www.homedecorindonesia.com/product/dining-table-modern/'
+    // },
+    // {
+    //   id: 'chandelier-modern',
+    //   imageIndex: 0,
+    //   position: { top: '80px', right: '100px' },
+    //   tooltipPosition: { top: '-40px', right: '-70px' },
+    //   title: 'Modern Chandelier',
+    //   productImage: 'https://www.homedecorindonesia.com/wp-content/uploads/2024/02/PO-21-600x390.jpg.webp',
+    //   description: 'LED lighting, Contemporary design',
+    //   pricing: {
+    //     original: 'Rp 8,750,000',
+    //     sale: 'Rp 6,125,000'
+    //   },
+    //   url: 'https://www.homedecorindonesia.com/product/chandelier-modern/'
+    // }
   ]
 
   const whatWeOfferItems = [
@@ -273,7 +273,7 @@ const DiningRoomFurniture = [
 
             <section className="py-16 bg-gray-50">
                 <MostPopularProducts 
-                apiEndpoint="/api/products/popular?categories=bedsets"
+                apiEndpoint="/api/products/popular"
                 itemsPerSlide={4}
                 autoPlay={true}
                 />

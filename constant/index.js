@@ -1,5 +1,5 @@
 export const navlinks = [
-  { 
+  {
     name: 'Furniture',
     href: '/furniture',
     hasDropdown: true,
@@ -285,7 +285,7 @@ export const navlinks = [
   { name: 'Wallpapers', hasDropdown: false, href: '/wallpapers' },
   { name: 'Flooring', hasDropdown: false, href: 'flooring' },
   { name: 'Catalogues', hasDropdown: false, href: '/catalogues' },
-  { name: 'Photo Gallery', hasDropdown: false, href: '/all-galery' },
+  { name: 'Showroom Gallery', hasDropdown: false, href: '/showroom-gallery' },
   { name: 'Blog', hasDropdown: false, href: '/blogs' },
   {
     name: 'SALE',

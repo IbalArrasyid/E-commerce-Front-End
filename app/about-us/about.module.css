@@ -1,0 +1,460 @@
+/* About Us Page Styles - Matching homedecorindonesia.com */
+
+.aboutPage {
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+/* Container */
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+}
+
+.heroImage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+/* Title Section */
+.titleSection {
+  padding: 60px 0 40px;
+  text-align: center;
+}
+
+.mainTitle {
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #000;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* About Intro Section */
+.aboutIntro {
+  padding: 40px 0 80px;
+}
+
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.textColumn {
+  padding-right: 20px;
+}
+
+.imageColumn {
+  position: relative;
+}
+
+.sectionSubtitle {
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #000;
+  margin: 0 0 5px;
+}
+
+.sectionTitle {
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #000;
+  margin: 0 0 30px;
+}
+
+.paragraphText {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  text-align: justify;
+}
+
+.paragraphText strong {
+  font-weight: 700;
+}
+
+.aboutImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0;
+}
+
+/* Products Section */
+.productsSection {
+  padding: 80px 0;
+  background-color: #f8f8f8;
+}
+
+.productsSection .sectionTitle {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.sectionDescription {
+  text-align: center;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 50px;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.productCard {
+  background-color: #fff;
+  padding: 30px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 0;
+  transition: box-shadow 0.3s ease;
+}
+
+.productCard:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.productIconWrapper {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+}
+
+.productIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.productTitle {
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Wholesale Section */
+.wholesaleSection {
+  padding: 80px 0;
+  background-color: #fff;
+}
+
+.wholesaleSection .twoColumnGrid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.wholesaleImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Partners Section */
+.partnersSection {
+  padding: 80px 0;
+  background-color: #f8f8f8;
+}
+
+.partnersSection .sectionTitle {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logosGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 30px;
+  align-items: center;
+  justify-items: center;
+}
+
+.logoCard {
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  transition: transform 0.3s ease;
+}
+
+.logoCard:hover {
+  transform: scale(1.05);
+}
+
+.brandLogo,
+.clientLogo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Clients Section */
+.clientsSection {
+  padding: 80px 0;
+  background-color: #fff;
+}
+
+.clientsSection .sectionTitle {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* CTA Section */
+.ctaSection {
+  padding: 100px 0;
+  background-color: #39483f;
+  text-align: center;
+}
+
+.ctaTitle {
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #fff;
+  margin: 0 0 20px;
+}
+
+.ctaDescription {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 16px 40px;
+  background-color: #fff;
+  color: #39483f;
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid #fff;
+}
+
+.ctaButton:hover {
+  background-color: transparent;
+  color: #fff;
+}
+
+.ctaButtonOutline {
+  display: inline-block;
+  padding: 16px 40px;
+  background-color: transparent;
+  color: #fff;
+  font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  border: 2px solid #fff;
+  transition: all 0.3s ease;
+}
+
+.ctaButtonOutline:hover {
+  background-color: #fff;
+  color: #39483f;
+}
+
+/* Map Section */
+.mapSection {
+  padding: 80px 0;
+  background-color: #fff;
+}
+
+.mapSection .sectionTitle {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.mapWrapper {
+  width: 100%;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .logosGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .heroSection {
+    height: 400px;
+  }
+  
+  .mainTitle {
+    font-size: 28px;
+    padding: 0 20px;
+  }
+  
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .textColumn {
+    padding-right: 0;
+    order: 2;
+  }
+  
+  .imageColumn {
+    order: 1;
+  }
+  
+  .wholesaleSection .textColumn {
+    order: 1;
+  }
+  
+  .wholesaleSection .imageColumn {
+    order: 2;
+  }
+  
+  .sectionSubtitle,
+  .sectionTitle {
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  .paragraphText {
+    text-align: left;
+  }
+  
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .productCard {
+    padding: 20px 15px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .logosGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .ctaTitle {
+    font-size: 28px;
+  }
+  
+  .ctaDescription {
+    font-size: 16px;
+    padding: 0 20px;
+  }
+  
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .ctaButton,
+  .ctaButtonOutline {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .heroSection {
+    height: 300px;
+  }
+  
+  .mainTitle {
+    font-size: 22px;
+  }
+  
+  .titleSection {
+    padding: 40px 0 30px;
+  }
+  
+  .aboutIntro {
+    padding: 30px 0 60px;
+  }
+  
+  .productsSection,
+  .partnersSection,
+  .clientsSection,
+  .wholesaleSection,
+  .mapSection {
+    padding: 60px 0;
+  }
+  
+  .ctaSection {
+    padding: 70px 0;
+  }
+  
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .productCard {
+    flex-direction: row;
+    text-align: left;
+  }
+  
+  .logosGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .sectionSubtitle,
+  .sectionTitle {
+    font-size: 20px;
+  }
+}

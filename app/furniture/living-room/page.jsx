@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import ShopBySection from '@/components/Common/ShopBySection'
 import Accordion from '@/components/Common/Accordion'
 import InteractiveHotspot from '@/components/Common/InteractiveHotspot'
+import MostPopularProducts from '@/components/Common/MostPopularProducts'
 
 export default function LivingRoomPage() {
   // Data for shop by sections
@@ -390,6 +391,15 @@ const LivingRoomFurniture = [
                 <h4>Conclusion</h4>
                 <p>At Home Decor Indonesia, we offer more than just Living room furnitures; we provide a pathway to your dream living space. With our quality, unique designs, and customizable options, we ensure every piece reflects your personal style and meets your needs. Experience the joy of transforming your living room into a space you love, with the ease and convenience of our service. Call us for creating a home that’s uniquely yours.</p>
             </section>
+
+                {/* Most Popular Products Section */}
+        <section className="py-16 bg-gray-50">
+            <MostPopularProducts 
+              apiEndpoint="/api/products/popular"
+              itemsPerSlide={4}
+              autoPlay={true}
+            />
+        </section>
         
         </div>
     </main>

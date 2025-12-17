@@ -585,15 +585,6 @@ export default function FurniturePage() {
             items={shopByHomeOffice}
         />
 
-        {/* Most Popular Products Section */}
-        <section className="py-16 bg-gray-50">
-            <MostPopularProducts 
-              apiEndpoint="/api/products/popular"
-              itemsPerSlide={4}
-              autoPlay={true}
-            />
-        </section>
-
         {/* Introduction Section */}
         <section className="text-left">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
@@ -641,6 +632,16 @@ export default function FurniturePage() {
                 allowMultiple={true}
                 />
             </section>
+
+            {/* Most Popular Products Section */}
+        <section className="py-16 bg-gray-50">
+            <MostPopularProducts 
+              apiEndpoint="/api/products/popular"
+              itemsPerSlide={4}
+              autoPlay={true}
+            />
+        </section>
+        
         </div>
     </main>
   )

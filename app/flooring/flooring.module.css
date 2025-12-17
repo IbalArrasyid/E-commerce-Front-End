@@ -1,0 +1,472 @@
+/* Flooring Page Styles */
+
+.flooringPage {
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section */
+.heroSection {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+.heroImage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+/* Intro Section */
+.introSection {
+    padding: 80px 0;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+.mainTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 25px;
+}
+
+.introText {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #555;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Catalogue Section */
+.catalogueSection {
+    padding: 80px 0;
+}
+
+.sectionTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #000;
+    text-align: center;
+    margin: 0 0 50px;
+}
+
+/* Products Grid */
+.productsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.productsGridTwo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Product Card */
+.productCard {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+}
+
+.cardImageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.cardOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 30px 20px;
+    transition: background 0.3s ease;
+}
+
+.productCard:hover .cardOverlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4));
+}
+
+.cardTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    text-align: center;
+    margin: 0 0 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.viewMoreBtn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: transparent;
+    color: #fff;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #fff;
+    transition: all 0.3s ease;
+}
+
+.productCard:hover .viewMoreBtn {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Offerings Section */
+.offeringsSection {
+    padding: 80px 0;
+    background-color: #f8f8f8;
+}
+
+.sectionDescription {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #666;
+    text-align: center;
+    max-width: 800px;
+    margin: -30px auto 50px;
+}
+
+.offeringsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.offeringCard {
+    text-align: center;
+    padding: 30px 20px;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.offeringCard:hover {
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.offeringIcon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 20px;
+    color: #39483f;
+}
+
+.offeringIcon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.offeringTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    margin: 0 0 10px;
+}
+
+.offeringDescription {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666;
+    margin: 0;
+}
+
+/* Featured Section */
+.featuredSection {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.featuredImage {
+    position: absolute;
+    inset: 0;
+}
+
+.featuredImage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.featuredContent {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 700px;
+}
+
+.featuredTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 20px;
+}
+
+.featuredText {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 35px;
+}
+
+.featuredButton {
+    display: inline-block;
+    padding: 16px 40px;
+    background-color: #fff;
+    color: #000;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #fff;
+}
+
+.featuredButton:hover {
+    background-color: transparent;
+    color: #fff;
+}
+
+/* CTA Section */
+.ctaSection {
+    padding: 100px 0;
+    background-color: #39483f;
+    text-align: center;
+}
+
+.ctaTitle {
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 20px;
+}
+
+.ctaDescription {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+}
+
+.ctaButtons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ctaButton {
+    display: inline-block;
+    padding: 16px 40px;
+    background-color: #fff;
+    color: #39483f;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #fff;
+}
+
+.ctaButton:hover {
+    background-color: transparent;
+    color: #fff;
+}
+
+.ctaButtonOutline {
+    display: inline-block;
+    padding: 16px 40px;
+    background-color: transparent;
+    color: #fff;
+    font-family: 'Futura Book', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 2px solid #fff;
+    transition: all 0.3s ease;
+}
+
+.ctaButtonOutline:hover {
+    background-color: #fff;
+    color: #39483f;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    .offeringsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .heroSection {
+        height: 350px;
+    }
+
+    .mainTitle {
+        font-size: 28px;
+    }
+
+    .introSection {
+        padding: 60px 0;
+    }
+
+    .catalogueSection {
+        padding: 60px 0;
+    }
+
+    .sectionTitle {
+        font-size: 24px;
+        margin-bottom: 35px;
+    }
+
+    .productsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .productsGridTwo {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .offeringsSection {
+        padding: 60px 0;
+    }
+
+    .featuredSection {
+        height: 400px;
+    }
+
+    .featuredTitle {
+        font-size: 30px;
+    }
+
+    .ctaTitle {
+        font-size: 26px;
+    }
+
+    .ctaButtons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ctaButton,
+    .ctaButtonOutline {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .heroSection {
+        height: 280px;
+    }
+
+    .introSection {
+        padding: 50px 0;
+    }
+
+    .mainTitle {
+        font-size: 24px;
+    }
+
+    .introText {
+        font-size: 15px;
+    }
+
+    .catalogueSection {
+        padding: 50px 0;
+    }
+
+    .sectionTitle {
+        font-size: 20px;
+    }
+
+    .productsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .productCard {
+        aspect-ratio: 16 / 10;
+    }
+
+    .offeringsGrid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .featuredSection {
+        height: 350px;
+    }
+
+    .featuredTitle {
+        font-size: 24px;
+    }
+
+    .featuredText {
+        font-size: 15px;
+    }
+
+    .ctaSection {
+        padding: 70px 0;
+    }
+
+    .ctaTitle {
+        font-size: 22px;
+    }
+}

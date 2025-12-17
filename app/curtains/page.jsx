@@ -6,6 +6,8 @@ import Reviews from '@/components/Homepage/Reviews';
 import Showrooms from '@/components/Homepage/Showrooms';
 import HeroSectionSlider1 from '@/components/Common/HeroSectionSlider-1';
 import TextMarquee from '@/components/Common/TextMarquee';
+import CategoryShowcase from '@/components/Common/CategoryShowcase';
+import OrderingProcess from '@/components/Common/OrderingProcess';
 
 export default function CurtainsPage() {
   const slides = [
@@ -55,6 +57,27 @@ export default function CurtainsPage() {
     }
   ]
 
+  const curtains = [
+  {
+    id: 1,
+    title: 'Blinds',
+    image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/06/116.jpg?w=300&h=300&crop=1',
+    href: '/blinds',
+  },
+  {
+    id: 2,
+    title: 'Curtains',
+    image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/12/curtains-category-image.jpg',
+    href: '/curtains',
+  },
+  {
+    id: 3,
+    title: 'Hardware',
+    image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/09/MAIN-BANNER-51-scaled.jpg',
+    href: '/hardware',
+  },
+];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Banner Slider */}
@@ -67,6 +90,82 @@ export default function CurtainsPage() {
         backgroundColor="bg-gray-900"
         textColor="text-white"
         pauseOnHover={true}
+      />
+
+      {/* First Category Showcase - Window Treatments */}
+      <CategoryShowcase
+        categories={curtains}
+        title="Design Your Custom Curtain"
+        buttons={[
+          { text: "Visit Showroom", href: "/curtains" },
+          { text: "Expert Advice", href: "https://api.whatsapp.com/send/?phone=6281806040506&text=Hi!%20I%E2%80%99d%20like%20to%20get%20expert%20advice%20about%20Custom%20Curtains.&type=phone_number&app_absent=0" }
+        ]}
+        backgroundColor="#FAFAFA"
+      />
+
+      <OrderingProcess />
+
+      {/* Second Category Showcase - Custom Curtains */}
+      <CategoryShowcase
+        categories={[
+          {
+            id: 1,
+            title: 'Living Room',
+            image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/living-room-curtains.jpg',
+            href: '/curtains/living-room'
+          },
+          {
+            id: 2,
+            title: 'Bedroom',
+            image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/bedroom-curtains.jpg',
+            href: '/curtains/bedroom'
+          },
+          {
+            id: 3,
+            title: 'Office',
+            image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/office-curtains.jpg',
+            href: '/curtains/office'
+          }
+        ]}
+        title="Custom Curtains by Room"
+        description="Tailored curtain solutions for every space in your home or office"
+        buttons={[
+          { text: "Start Custom Order", href: "/custom-order" },
+          { text: "Room Inspiration", href: "/gallery" }
+        ]}
+        backgroundColor="#F8F8F8"
+        contentPosition="right"
+      />
+
+      {/* Third Category Showcase - Smart Solutions */}
+      <CategoryShowcase
+        categories={[
+          {
+            id: 1,
+            title: 'Motorized Curtains',
+            image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/smart-curtain-tech-part-2.jpg',
+            href: '/curtains/motorized'
+          },
+          {
+            id: 2,
+            title: 'Blackout Curtains',
+            image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/blackout-curtains.jpg',
+            href: '/curtains/blackout'
+          },
+          {
+            id: 3,
+            title: 'Thermal Curtains',
+            image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/thermal-curtains.jpg',
+            href: '/curtains/thermal'
+          }
+        ]}
+        title="Smart Curtain Solutions"
+        description="Advanced curtain technologies for modern living and energy efficiency"
+        buttons={[
+          { text: "Explore Smart Tech", href: "/smart-curtains" },
+          { text: "Schedule Demo", href: "/schedule-demo" }
+        ]}
+        backgroundColor="#F5F5F5"
       />
 
       {/* Product Cards Section */}
