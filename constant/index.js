@@ -280,7 +280,7 @@ export const navlinks = [
     ]
   },
   { name: 'Rugs', hasDropdown: false, href: '/rugs' },
-  { name: 'Curtains', hasDropdown: false, href: '/curtains' },
+  { name: 'Curtains & Drapes', hasDropdown: false, href: '/curtains-drapes' },
   { name: 'Upholstery', hasDropdown: false, href: '/upholstery' },
   { name: 'Wallpapers', hasDropdown: false, href: '/wallpapers' },
   { name: 'Flooring', hasDropdown: false, href: 'flooring' },
