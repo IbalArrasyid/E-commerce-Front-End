@@ -5,6 +5,8 @@ import Image from 'next/image'
 import HeroSectionSlider1 from '@/components/Common/HeroSectionSlider-1'
 import Showrooms from '@/components/Homepage/Showrooms'
 import CtaBanner from '@/components/Common/CtaBanner'
+import ServicesSection from '@/components/Common/ServicesSection'
+import BenefitsExpectation from '@/components/Common/BenefitExpectation'
 
 export default function UpholsteryPage() {
   const slides = [
@@ -61,7 +63,10 @@ export default function UpholsteryPage() {
       title: 'Custom Beds & Headboards',
       image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/03/3.-CUSTOM-BEDS-HEADBOARDS-scaled-1.jpg',
       href: '/upholstery/beds-headboards'
-    },
+    }
+  ]
+
+  const customService = [
     {
       id: 'custom-foams-cushions',
       title: 'Custom Foams & Cushions',
@@ -73,6 +78,21 @@ export default function UpholsteryPage() {
       title: 'Custom Fabric Wall Panelling',
       image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/02/5.-CUSTOM-FABRIC-WALL-PANELLING_.jpg',
       href: '/upholstery/wall-panelling'
+    }
+  ]
+
+  const products = [
+    {
+      id: 'upholstery-fabrics indors',
+      title: 'Upholstery Fabrics Indoors',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/03/6.-UPHOLSTERY-FABRICS-INDOORS.jpg',
+      href: '/upholstery/fabrics-indoors'
+    },
+    {
+      id: 'upholstery-fabrics-outdoors',
+      title: 'Upholstery Fabrics Outdoors',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2025/03/7.-UPHOLSTERY-FABRICS-OUTDOORS.jpg',
+      href: '/upholstery/fabrics-outdoors'
     }
   ]
 
@@ -94,6 +114,21 @@ export default function UpholsteryPage() {
           </div>
         </div>
       </section>
+
+      {/* Services Section */}
+      <ServicesSection 
+        title="Services"
+        topData={services}
+        bottomData={customService}
+      />
+
+      <ServicesSection
+        title="Products"
+        topData={[]}
+        bottomData={products} 
+      />
+
+      <BenefitsExpectation />
 
       {/* Cta Banner Section */}
       <CtaBanner 

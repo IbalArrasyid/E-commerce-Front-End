@@ -1,12 +1,12 @@
 import Theme from "@/theme-provider";
 import "./globals.css";
-import { Poppins } from "next/font/google";
 import localFont from 'next/font/local';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloating from "@/components/WhatsappFloating";
 import BottomNavigation from "@/components/BottomNavigation";
 import { AuthProvider } from "@/hooks/useAuth";
+import ChatWidget from "@/components/ChatWidget";
 
 const futuraBook = localFont({
   src: './fonts/Futura-Book.ttf',
@@ -37,7 +37,7 @@ export const metadata = {
   // },
   twitter: {
     card: "summary_large_image",
-    title: "9Teen Supply Website",
+    title: "Home Decor Indonesia",
   },
 }
 
@@ -52,6 +52,7 @@ export default function RootLayout({ children }) {
             <Header />
             {children}
             <WhatsAppFloating />
+            <ChatWidget />
             <BottomNavigation />
             <Footer />
           </AuthProvider>

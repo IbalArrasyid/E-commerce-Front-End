@@ -31,31 +31,49 @@ export default function AiChatWidget() {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
-    // 1. Tambahkan pesan User ke UI
+    // 1. Tampilkan pesan User di layar
     const userMessage = { id: Date.now(), role: 'user', text: inputValue };
     setMessages((prev) => [...prev, userMessage]);
-    setInputValue("");
+    
+    const originalInput = inputValue; // Simpan teks untuk dikirim
+    setInputValue(""); // Kosongkan input
     setIsLoading(true);
 
     try {
-      // ==========================================
-      // AREA INTEGRASI API (TODO: ISI DI SINI)
-      // ==========================================
-      
-      // Contoh simulasi delay API (Hapus bagian ini nanti)
-      // const response = await fetch('/api/chat', { method: 'POST', body: ... })
-      
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulasi mikir
-      
-      const aiResponseText = "Ini adalah respon simulasi. Silakan sambungkan ke API Agent Anda di kode baris 45.";
+      // 2. TEMBAK API KE BACK-END SENDIRI
+      const response = await fetch('http://localhost:4000/api/chat', { 
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ 
+          message: originalInput,
+          userId: 'guest-123' // Opsional
+        })
+      });
 
-      // 2. Tambahkan respon AI ke UI
-      const aiMessage = { id: Date.now() + 1, role: 'assistant', text: aiResponseText };
+      if (!response.ok) {
+        throw new Error('Gagal menghubungi server AI');
+      }
+
+      const data = await response.json();
+      
+      // 3. Tampilkan balasan dari Server
+      const aiMessage = { 
+        id: Date.now() + 1, 
+        role: 'assistant', 
+        text: data.reply // Pastikan ini sesuai dengan JSON dari backend (res.json({ reply: ... }))
+      };
+      
       setMessages((prev) => [...prev, aiMessage]);
 
     } catch (error) {
-      console.error("Error sending message:", error);
-      const errorMessage = { id: Date.now() + 1, role: 'assistant', text: "Maaf, terjadi kesalahan pada sistem." };
+      console.error("Error:", error);
+      const errorMessage = { 
+        id: Date.now() + 1, 
+        role: 'assistant', 
+        text: "Maaf, server AI sedang sibuk atau tidak dapat dihubungi." 
+      };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
