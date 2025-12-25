@@ -1,4 +1,4 @@
-'use client'; // WAJIB: Menandakan ini adalah Client Component
+'use client'; 
 
 import React, { useState, useEffect, useRef } from 'react';
 import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots } from 'react-icons/fa';
@@ -45,8 +45,8 @@ const ChatWidget = () => {
     setIsLoading(true); // Mulai loading
 
     try {
-      // 2. Kirim ke Backend AI (Pastikan port sesuai server Express Anda)
-      const response = await fetch('http://localhost:4000/api/chat', {
+      // 2. Kirim ke Backend AI (Pastikan port sesuai)
+      const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -62,7 +62,7 @@ const ChatWidget = () => {
       // 3. Tambah balasan AI ke UI
       const agentResponse = {
         id: Date.now() + 1,
-        text: data.reply, // Pastikan key ini sesuai dengan response backend ({ reply: "..." })
+        text: data.response, // Pastikan key sesuai dengan response backend 
         isAgent: true
       };
 

@@ -41,7 +41,7 @@ export default function AiChatWidget() {
 
     try {
       // 2. TEMBAK API KE BACK-END SENDIRI
-      const response = await fetch('http://localhost:4000/api/chat', { 
+      const response = await fetch('http://localhost:8000/chat', { 
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json' 
@@ -62,7 +62,7 @@ export default function AiChatWidget() {
       const aiMessage = { 
         id: Date.now() + 1, 
         role: 'assistant', 
-        text: data.reply // Pastikan ini sesuai dengan JSON dari backend (res.json({ reply: ... }))
+        text: data.response // Pastikan ini sesuai dengan JSON dari backend (res.json({ reply: ... }))
       };
       
       setMessages((prev) => [...prev, aiMessage]);
