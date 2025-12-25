@@ -110,12 +110,10 @@ export async function POST(request) {
         id: wcData.id,
         email: wcData.email,
         firstName: wcData.first_name,
-        lastName: wcData.last_name,
-        role: wcData.role,
-        username: wcData.username
       },
-      token: token 
+      token
     });
+
 
     // Opsional: Set Cookie HTTPOnly to enhance security
     if (token) {

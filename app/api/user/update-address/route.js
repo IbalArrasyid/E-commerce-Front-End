@@ -32,8 +32,8 @@ export async function POST(request) {
     }
 
     // Update Customer in WooCommerce
-    const ck = process.env.WC_CONSUMER_KEY;
-    const cs = process.env.WC_CONSUMER_SECRET;
+    const ck = process.env.WC_FULL_KEY;
+    const cs = process.env.WC_FULL_SECRET;
 
     const updateRes = await fetch(`${wpUrl}/wp-json/wc/v3/customers/${userId}`, {
       method: 'PUT',
@@ -51,9 +51,18 @@ export async function POST(request) {
 
     const updatedCustomer = await updateRes.json();
 
+    const filteredCustomer = {
+      id: updatedCustomer.id,
+      first_name: updatedCustomer.first_name,
+      last_name: updatedCustomer.last_name,
+      email: updatedCustomer.email,
+      billing: updatedCustomer.billing,
+      shipping: updatedCustomer.shipping
+    };
+
     return NextResponse.json({ 
       success: true, 
-      customer: updatedCustomer 
+      customer: filteredCustomer
     });
 
   } catch (error) {

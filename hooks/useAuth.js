@@ -17,37 +17,42 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // 1. Check authentication status on mount (Page Refresh)
   useEffect(() => {
-    const initializeAuth = () => {
-      try {
-        // Cek apakah kode berjalan di browser
-        if (typeof window !== 'undefined') {
-          const storedUser = localStorage.getItem('homedecor_user');
-          const storedToken = localStorage.getItem('homedecor_token');
+  const initAuth = async () => {
+    const token = localStorage.getItem('homedecor_token');
 
-          if (storedUser && storedToken) {
-            setUser(JSON.parse(storedUser));
-            setIsAuthenticated(true);
-          } else {
-            setUser(null);
-            setIsAuthenticated(false);
-          }
+    if (!token) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/user/details', {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      } catch (error) {
-        console.error('Failed to parse user data:', error);
-        // Jika data corrupt, bersihkan storage
-        localStorage.removeItem('homedecor_user');
-        localStorage.removeItem('homedecor_token');
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      });
 
-    initializeAuth();
+      if (!res.ok) throw new Error('Unauthorized');
+
+      const data = await res.json();
+      setUser(data.user);
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.error('Auth init failed:', err);
+      localStorage.removeItem('homedecor_token');
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+    initAuth();
   }, []);
+
 
   // 2. Login Function
   const login = async (emailOrUsername, password) => {
@@ -70,18 +75,23 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Update State
-        setUser(data.user);
+        localStorage.setItem('homedecor_token', data.token);
+
+        // fetch user details
+        const userRes = await fetch('/api/user/details', {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        });
+
+        const userData = await userRes.json();
+
+        setUser(userData.user);
         setIsAuthenticated(true);
-        
-        // Simpan ke LocalStorage
-        localStorage.setItem('homedecor_user', JSON.stringify(data.user));
-        if (data.token) {
-            localStorage.setItem('homedecor_token', data.token);
-        }
-        
-        return { success: true, user: data.user };
-      } else {
+
+        return { success: true };
+      }
+      else {
         return { success: false, error: data.error || 'Login failed' };
       }
     } catch (error) {
@@ -108,20 +118,25 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Update State
-        setUser(data.user);
-        setIsAuthenticated(true);
+  localStorage.setItem('homedecor_token', data.token);
 
-        // Simpan ke LocalStorage
-        localStorage.setItem('homedecor_user', JSON.stringify(data.user));
-        
-        // Register biasanya langsung mengembalikan token (auto-login)
-        if (data.token) {
-           localStorage.setItem('homedecor_token', data.token);
-        }
+  // fetch user details
+  const userRes = await fetch('/api/user/details', {
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
+  });
 
-        return { success: true, user: data.user };
-      } else {
+      if (!userRes.ok) throw new Error('Failed to fetch user');
+
+      const userData = await userRes.json();
+
+      setUser(userData.user);
+      setIsAuthenticated(true);
+
+      return { success: true };
+      }
+      else {
         return { success: false, error: data.error || 'Registration failed' };
       }
     } catch (error) {
@@ -143,7 +158,6 @@ export const AuthProvider = ({ children }) => {
       // Bersihkan State & Storage
       setUser(null);
       setIsAuthenticated(false);
-      localStorage.removeItem('homedecor_user');
       localStorage.removeItem('homedecor_token');
       
       // Refresh halaman opsional, untuk memastikan semua komponen reset
@@ -159,6 +173,26 @@ export const AuthProvider = ({ children }) => {
      return null;
   };
 
+   const refreshUser = async () => {
+    const token = localStorage.getItem('homedecor_token');
+    if (!token) return;
+
+    try {
+      const res = await fetch('/api/user/details', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error('Unauthorized');
+
+      const data = await res.json();
+      setUser(data.user);
+    } catch (err) {
+      console.error('Failed to refresh user:', err);
+    }
+  };
+
   const value = {
     user,
     isLoading,
@@ -166,7 +200,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    getToken, // Expose fungsi ini
+    getToken,
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -17,7 +17,16 @@ import {
 export default function MyAccountPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isAuthenticated, isLoading, logout } = useAuth(); // Pastikan ada fungsi logout di useAuth
+  const {
+    user,
+    isAuthenticated,
+    isLoading,
+    login,
+    register,
+    logout,
+    refreshUser
+  } = useAuth();
+
 
   // State untuk Tab Navigasi Dashboard
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -32,6 +41,12 @@ export default function MyAccountPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [message, setMessage] = useState({
+  type: '', // 'success' | 'error'
+  text: ''
+  });
+
+
   const redirectTo = searchParams.get('redirectTo');
 
   // --- LOGIC AUTH (Login/Register) ---
@@ -43,47 +58,84 @@ export default function MyAccountPage() {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: formData.username, password: formData.password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        if (redirectTo) router.push(redirectTo);
-        else router.refresh(); // Refresh halaman agar state isAuthenticated update
-      } else {
-        setError(data.error || 'Login failed');
-      }
-    } catch (err) { setError('Network error.'); } finally { setIsSubmitting(false); }
+
+    const result = await login(
+      formData.username,
+      formData.password
+    );
+
+    if (!result.success) {
+      setError(result.error || 'Login failed');
+    }
+
+    setIsSubmitting(false);
   };
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.reg_password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        if (redirectTo) router.push(redirectTo);
-        else router.refresh();
-      } else {
-        setError(data.error || 'Registration failed');
-      }
-    } catch (err) { setError('Network error.'); } finally { setIsSubmitting(false); }
+
+    const result = await register({
+      email: formData.email,
+      password: formData.reg_password,
+    });
+
+    if (!result.success) {
+      setError(result.error || 'Registration failed');
+    }
+
+    setIsSubmitting(false);
   };
+
 
   const handleLogout = () => {
     if (logout) logout();
-    // Redirect atau refresh manual jika perlu
     window.location.href = '/my-account'; 
   };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target);
+    const payload = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      displayName: formData.get('displayName'),
+    };
+
+    try {
+      const response = await fetch('/api/auth/update-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+      await refreshUser();
+      setMessage({
+        type: 'success',
+        text: 'Account details updated successfully.'
+      });
+    } else {
+      setMessage({
+        type: 'error',
+        text: data.error || 'Failed to update profile.'
+      });
+    }
+
+    } catch (err) {
+      setError('Network error occurred.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   // --- RENDER LOADING ---
   if (isLoading) {
@@ -241,27 +293,42 @@ export default function MyAccountPage() {
               {activeTab === 'account-details' && (
                 <div className="max-w-xl">
                   <h2 className="text-2xl font-light mb-6">Account Details</h2>
-                  <form className="space-y-4">
+
+                  {/* ALERT MESSAGE */}
+                  {message.text && (
+                    <div
+                      className={`p-4 mb-6 text-sm ${
+                        message.type === 'success'
+                          ? 'bg-green-50 text-green-800'
+                          : 'bg-red-50 text-red-800'
+                      }`}
+                    >
+                      {message.text}
+                    </div>
+                  )}
+                  <form onSubmit={handleUpdateProfile} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm mb-1">First name *</label>
-                        <input type="text" defaultValue={user?.firstName} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
+                        <input name="firstName"type="text" defaultValue={user?.firstName || user?.first_name} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
                       </div>
                       <div>
                         <label className="block text-sm mb-1">Last name *</label>
-                        <input type="text" defaultValue={user?.lastName} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
+                        <input name="lastName" type="text" defaultValue={user?.lastName || user?.last_name} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm mb-1">Display name *</label>
-                      <input type="text" defaultValue={user?.username} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
+                      <input name="displayName" type="text" defaultValue={user?.username || user?.display_name} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
                       <span className="text-xs text-gray-500">This will be how your name will be displayed in the account section and in reviews</span>
                     </div>
                     <div>
                       <label className="block text-sm mb-1">Email address *</label>
                       <input type="email" defaultValue={user?.email} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
                     </div>
-                    <button className="bg-black text-white px-6 py-3 rounded mt-4 hover:bg-gray-800">Save changes</button>
+                    <button type="submit" disabled={isSubmitting} className="bg-black text-white px-6 py-3 rounded mt-4 hover:bg-gray-800 transition-colors disabled:bg-gray-400">
+                    {isSubmitting ? 'Saving...' : 'Save changes'}
+                    </button>
                   </form>
                 </div>
               )}
