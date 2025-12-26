@@ -1,16 +1,15 @@
 'use client'; 
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots } from 'react-icons/fa';
+import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag } from 'react-icons/fa';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // State untuk loading indicator
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Initial Greeting
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setMessages([
@@ -23,7 +22,6 @@ const ChatWidget = () => {
     }
   }, [isOpen, messages.length]);
 
-  // Auto-scroll ke bawah
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -32,7 +30,6 @@ const ChatWidget = () => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
 
-    // 1. Tambah pesan User ke UI
     const userMessage = { 
       id: Date.now(), 
       text: inputValue, 
@@ -40,18 +37,17 @@ const ChatWidget = () => {
     };
     
     setMessages(prev => [...prev, userMessage]);
-    const currentInput = inputValue; // Simpan untuk dikirim
+    const currentInput = inputValue;
     setInputValue("");
-    setIsLoading(true); // Mulai loading
+    setIsLoading(true);
 
     try {
-      // 2. Kirim ke Backend AI (Pastikan port sesuai)
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: currentInput,
-          userId: 'guest-web-user' // Bisa diganti session ID
+          userId: 'guest-web-user'
         }),
       });
 
@@ -59,42 +55,55 @@ const ChatWidget = () => {
 
       const data = await response.json();
 
-      // 3. Tambah balasan AI ke UI
-      const agentResponse = {
-        id: Date.now() + 1,
-        text: data.response, // Pastikan key sesuai dengan response backend 
-        isAgent: true
-      };
+      let agentResponse;
+      if (data.products && Array.isArray(data.products)) {
+        agentResponse = {
+          id: Date.now() + 1,
+          text: data.response,
+          isAgent: true,
+          products: data.products
+        };
+      } else {
+        agentResponse = {
+          id: Date.now() + 1,
+          text: data.response,
+          isAgent: true
+        };
+      }
 
       setMessages(prev => [...prev, agentResponse]);
 
     } catch (error) {
       console.error('Error:', error);
-      // Fallback error message di UI
       setMessages(prev => [...prev, {
         id: Date.now(),
         text: "Maaf, server sedang sibuk. Mohon coba lagi nanti.",
         isAgent: true
       }]);
     } finally {
-      setIsLoading(false); // Selesai loading
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
     }
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
       
-      {/* --- CHAT WINDOW --- */}
       <div className={`
         flex flex-col
         fixed bottom-[90px] right-6 
-        w-[350px] h-[500px] 
+        w-[380px] h-[550px] 
         bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100
         transition-all duration-300 origin-bottom-right
         ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}
       `}>
         
-        {/* Header */}
         <div className="bg-slate-900 p-4 flex justify-between items-center text-white shadow-md">
           <div className="flex items-center gap-3">
             <div className="bg-white/10 p-2 rounded-full">
@@ -116,23 +125,26 @@ const ChatWidget = () => {
           </button>
         </div>
 
-        {/* Messages Area */}
         <div className="flex-1 bg-gray-50 p-4 overflow-y-auto">
           <div className="flex flex-col gap-3">
             {messages.map((msg, index) => (
-              <div 
-                key={msg.id || index} 
-                className={`max-w-[85%] p-3 text-sm rounded-2xl shadow-sm ${
-                  msg.isAgent 
-                    ? 'bg-white border border-gray-200 text-gray-700 self-start rounded-bl-none' 
-                    : 'bg-slate-800 text-white self-end rounded-br-none'
-                }`}
-              >
-                {msg.text}
+              <div key={msg.id || index}>
+                <div 
+                  className={`max-w-[85%] p-3 text-sm rounded-2xl shadow-sm ${
+                    msg.isAgent 
+                      ? 'bg-white border border-gray-200 text-gray-700 self-start rounded-bl-none' 
+                      : 'bg-slate-800 text-white self-end rounded-br-none ml-auto'
+                  }`}
+                >
+                  {msg.text}
+                </div>
+                
+                {msg.products && msg.products.length > 0 && (
+                  <ProductCarousel products={msg.products} />
+                )}
               </div>
             ))}
             
-            {/* Loading Indicator (Typing bubble) */}
             {isLoading && (
               <div className="self-start bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-1 w-16">
                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -144,36 +156,35 @@ const ChatWidget = () => {
           </div>
         </div>
 
-        {/* Input Area */}
-        <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+        <div className="p-3 bg-white border-t border-gray-100 flex gap-2">
           <input
             type="text"
             className="flex-1 px-4 py-2 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-gray-800 transition-all"
             placeholder="Tulis pesan..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
             disabled={isLoading}
           />
           <button
-            type="submit"
+            onClick={handleSendMessage}
             disabled={!inputValue.trim() || isLoading}
             className={`
               p-3 rounded-full text-white transition-all shadow-md flex items-center justify-center
               ${!inputValue.trim() || isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-700 hover:scale-105'}
             `}
           >
-            <FaPaperPlane className="ml-[-2px]" /> {/* Adjustment biar icon terlihat tengah */}
+            <FaPaperPlane className="ml-[-2px]" />
           </button>
-        </form>
+        </div>
       </div>
 
-      {/* --- TOGGLE BUTTON (Floating) --- */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`
           flex items-center justify-center
           w-14 h-14 rounded-full shadow-2xl transition-all duration-300 ease-in-out
-          ${isOpen ? 'bg-slate-800 rotate-90' : 'bg-green-600 hover:bg-green-700 hover:scale-110 animate-bounce-slow'}
+          ${isOpen ? 'bg-slate-800 rotate-90' : 'bg-green-600 hover:bg-green-700 hover:scale-110'}
         `}
       >
         {isOpen ? (
@@ -183,6 +194,169 @@ const ChatWidget = () => {
         )}
       </button>
 
+    </div>
+  );
+};
+
+const formatIDR = (value) => {
+  if (!value) return 'Rp 0'
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  }).format(value)
+}
+
+
+const ProductCarousel = ({ products }) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  useEffect(() => {
+    setCurrentImageIndex(0)
+  }, [currentIndex])
+
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? products.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === products.length - 1 ? 0 : prev + 1));
+  };
+
+  const currentProduct = products[currentIndex];
+
+  return (
+    <div className="mt-3 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+      <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 h-48 flex items-center justify-center">
+        {currentProduct.images.length > 1 && (
+          <>
+            <button
+              onClick={() =>
+                setCurrentImageIndex(prev =>
+                  prev === 0 ? currentProduct.images.length - 1 : prev - 1
+                )
+              }
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow"
+            >
+              <FaChevronLeft />
+            </button>
+
+            <button
+              onClick={() =>
+                setCurrentImageIndex(prev =>
+                  prev === currentProduct.images.length - 1 ? 0 : prev + 1
+                )
+              }
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow"
+            >
+              <FaChevronRight />
+            </button>
+          </>
+        )}
+
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+          {currentProduct.images.map((_, idx) => (
+            <div
+              key={idx}
+              onClick={() => setCurrentImageIndex(idx)}
+              className={`h-1.5 rounded-full cursor-pointer transition-all ${
+                idx === currentImageIndex ? 'w-5 bg-slate-700' : 'w-1.5 bg-slate-300'
+              }`}
+            />
+          ))}
+        </div>
+
+
+        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+          <FaTag className="text-xs" />
+          SALE
+        </div>
+        {currentProduct.images && currentProduct.images.length > 0 ? (
+          <img
+            src={currentProduct.images[currentImageIndex]}
+            alt={currentProduct.item_name}
+            className="w-full h-full object-cover transition-all duration-300"
+            onError={(e) => {
+              e.currentTarget.src = "/placeholder.png"
+            }}
+          />
+
+        ) : (
+          <div className="text-6xl">🛋️</div>
+        )}
+      </div>
+
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h4 className="font-bold text-gray-800 text-sm line-clamp-2 flex-1">
+            {currentProduct.item_name || 'Product Name'}
+          </h4>
+        </div>
+
+        <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+          {currentProduct.item_description || 'Product description'}
+        </p>
+
+        <div className="text-xs text-gray-500 mb-2">
+          Brand: <span className="font-semibold text-gray-700">{currentProduct.brand || 'Unknown'}</span>
+        </div>
+
+        {currentProduct.user_reviews && currentProduct.user_reviews.length > 0 && (
+          <div className="flex items-center gap-1 mb-3">
+            <div className="flex text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <FaStar key={i} className={`text-xs ${i < Math.round(currentProduct.user_reviews[0].rating) ? '' : 'text-gray-300'}`} />
+              ))}
+            </div>
+            <span className="text-xs text-gray-600">
+              ({currentProduct.user_reviews[0].rating}/5)
+            </span>
+          </div>
+        )}
+
+
+        <div className="flex items-end gap-2 mb-3">
+          <span className="text-lg font-bold text-green-600">
+            {formatIDR(currentProduct.prices?.sale_price || 0)}
+          </span>
+          <span className="text-sm text-gray-400 line-through">
+            {formatIDR(currentProduct.prices?.full_price || 0)}
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <button
+            onClick={goToPrevious}
+            className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+          >
+            <FaChevronLeft className="text-sm text-slate-700" />
+          </button>
+
+          <div className="flex gap-1">
+            {products.map((_, idx) => (
+              <div
+                key={idx}
+                className={`h-1.5 rounded-full transition-all ${
+                  idx === currentIndex ? 'w-6 bg-slate-700' : 'w-1.5 bg-slate-300'
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={goToNext}
+            className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+          >
+            <FaChevronRight className="text-sm text-slate-700" />
+          </button>
+        </div>
+
+        <div className="text-center text-xs text-gray-500 mt-2">
+          {currentIndex + 1} of {products.length}
+        </div>
+      </div>
     </div>
   );
 };
