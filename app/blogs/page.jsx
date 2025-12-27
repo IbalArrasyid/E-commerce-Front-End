@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default async function BlogPage() {
   // Fetch blog posts from WordPress
   const res = await fetch(
@@ -30,7 +32,7 @@ export default async function BlogPage() {
               key={post.id}
               className="flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group"
             >
-              <a href={`/blog/${post.slug}`} className="block relative">
+              <Link href={`/blogs/${post.slug}`} className="block relative">
                 <div className="relative aspect-[16/9] overflow-hidden">
                   {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
                     <img
@@ -96,7 +98,7 @@ export default async function BlogPage() {
                     </svg>
                   </div>
                 </div>
-              </a>
+              </Link>
             </article>
           ))}
         </div>
