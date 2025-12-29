@@ -1,8 +1,7 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
-import { createWooClientWrite } from "@/lib/woocommerce";
-import { generateDokuPaymentUrl } from "@/lib/doku"; // Use the fixed DOKU library
+import { createWooClientWrite, createWooClientRead } from "@/lib/woocommerce";
 import { getProductById } from "@/services/server-helpers"; // Get product prices
 
 // --- HELPER FUNCTIONS ---
@@ -189,33 +188,50 @@ export async function POST(request) {
     const createdOrder = wooRes.data;
     console.log(`✅ Order Created: #${createdOrder.id}`);
 
-    // 6.  DOKU PAYMENT GENERATION (USING FIXED LIBRARY) 
+    // 6. GET PAYMENT URL FROM WOOCOMMERCE DOKU PLUGIN
+    // The DOKU JOKUL plugin for WooCommerce provides payment_url and checkout_payment_url
+    // We use WooCommerce's built-in payment URL instead of generating our own
     let paymentResponse = { paymentUrl: null };
 
     if (orderData.paymentMethod === 'doku') {
-      console.log('💳 Generating Doku Payment using library...');
+      console.log('💳 Getting DOKU payment URL from WooCommerce plugin...');
 
-      try {
-        const dokuResponse = await generateDokuPaymentUrl({
-          orderId: createdOrder.id.toString(),
-          amount: totals.total,
-          customerEmail: billingData.email || orderData.email,
-          customerName: `${billingData.first_name || orderData.firstName} ${billingData.last_name || orderData.lastName}`.trim(),
-          products: orderData.items
-        });
+      // Priority: payment_url (from plugin) > checkout_payment_url (WooCommerce default)
+      const paymentUrl = createdOrder.payment_url || createdOrder.checkout_payment_url;
 
-        console.log('✅ Doku Payment URL Generated:', dokuResponse);
-
+      if (paymentUrl) {
+        console.log('✅ DOKU Payment URL from WooCommerce:', paymentUrl);
         paymentResponse = {
-          paymentUrl: dokuResponse.payment_url,
-          sessionId: dokuResponse.session_id || null,
-          invoiceNumber: dokuResponse.invoice_number
+          paymentUrl: paymentUrl,
+          orderId: createdOrder.id.toString(),
+          invoiceNumber: orderNumber
         };
+      } else {
+        // If no payment URL, fetch the order again to get updated URLs
+        console.log('⚠️ No payment URL in response, fetching order...');
+        try {
+          const apiRead = createWooClientRead();
+          if (apiRead) {
+            const orderRes = await apiRead.get(`orders/${createdOrder.id}`);
+            const updatedOrder = orderRes.data;
+            const fallbackUrl = updatedOrder.payment_url || updatedOrder.checkout_payment_url;
 
-      } catch (dokuError) {
-        console.error('❌ Doku Error:', dokuError.message);
-        // Real error - no fallback for production
-        throw new Error(`Payment gateway error: ${dokuError.message}`);
+            if (fallbackUrl) {
+              console.log('✅ DOKU Payment URL from fetch:', fallbackUrl);
+              paymentResponse = {
+                paymentUrl: fallbackUrl,
+                orderId: createdOrder.id.toString(),
+                invoiceNumber: orderNumber
+              };
+            }
+          }
+        } catch (fetchError) {
+          console.error('❌ Error fetching order payment URL:', fetchError.message);
+        }
+
+        if (!paymentResponse.paymentUrl) {
+          throw new Error('Payment URL not available. Please ensure DOKU plugin is configured in WooCommerce.');
+        }
       }
     }
 
@@ -227,20 +243,11 @@ export async function POST(request) {
       payment: paymentResponse
     });
 
-    // Ensure payment object has the structure expected by frontend
-    const finalPaymentResponse = paymentResponse.paymentUrl ? {
-      paymentUrl: paymentResponse.paymentUrl,
-      orderId: createdOrder.id.toString(),
-      invoiceNumber: paymentResponse.invoiceNumber || orderNumber
-    } : {
-      error: paymentResponse.error || 'Payment generation failed'
-    };
-
     return NextResponse.json({
       success: true,
       order_id: createdOrder.id,
       invoice_number: orderNumber,
-      payment: finalPaymentResponse
+      payment: paymentResponse
     }, { status: 201 });
 
   } catch (error) {

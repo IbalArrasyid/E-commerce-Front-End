@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle, XCircle, Clock, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
@@ -12,73 +12,150 @@ export default function CheckoutFinishPage() {
   const [paymentStatus, setPaymentStatus] = useState('processing');
   const [orderDetails, setOrderDetails] = useState(null);
   const [error, setError] = useState(null);
+  const [pollCount, setPollCount] = useState(0);
+  const pollIntervalRef = useRef(null);
+
+  // Maximum number of polls before giving up
+  const MAX_POLLS = 30; // 30 * 2 seconds = 1 minute max wait
+  const POLL_INTERVAL = 2000; // 2 seconds
+
+  /**
+   * Fetch order status from WooCommerce API
+   * This polls WooCommerce to get the actual payment status
+   * after the DOKU plugin has processed the callback
+   */
+  const fetchOrderStatus = async (orderId) => {
+    try {
+      console.log(`🔍 Polling order #${orderId} status...`);
+
+      const response = await fetch('/api/orders/fetch-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch order status');
+      }
+
+      const data = await response.json();
+      console.log(`✅ Order #${orderId} status:`, data.status);
+
+      return data;
+
+    } catch (err) {
+      console.error('❌ Error fetching order status:', err);
+      throw err;
+    }
+  };
 
   useEffect(() => {
-    const processPaymentCallback = async () => {
+    // Get order ID from sessionStorage or URL params
+    const orderId = sessionStorage.getItem('pendingOrderId') || searchParams.get('order_id');
+
+    if (!orderId) {
+      console.error('❌ No order ID found');
+      setLoading(false);
+      setError('Order ID tidak ditemukan');
+      setPaymentStatus('error');
+      return;
+    }
+
+    console.log('🔍 Processing order:', orderId);
+
+    /**
+     * Poll WooCommerce API for order status
+     * The DOKU plugin handles the callback and updates the order status in WooCommerce
+     * We poll WooCommerce to get the updated status
+     */
+    const pollOrderStatus = async () => {
       try {
-        // Get parameters from URL (DOKU callback)
-        const orderId = searchParams.get('order_id') || searchParams.get('invoice_number');
-        const transactionStatus = searchParams.get('transaction_status') || searchParams.get('status');
-        const paymentCode = searchParams.get('payment_code');
-        const signatureKey = searchParams.get('signature_key');
-
-        console.log('🔍 DOKU Callback Parameters:', {
-          orderId,
-          transactionStatus,
-          paymentCode,
-          signatureKey
-        });
-
-        if (!orderId) {
-          throw new Error('Order ID tidak ditemukan');
-        }
-
-        // Call API to check real payment status from DOKU
-        const response = await fetch('/api/orders/check-status', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ invoiceNumber: orderId })
-        });
-
-        const data = await response.json();
-        setLoading(false);
+        const data = await fetchOrderStatus(orderId);
 
         if (data.success) {
-          const status = data.status; // SUCCESS, FAILED, PENDING
+          const { status, order } = data;
 
+          // Update order details
+          setOrderDetails({
+            orderId: order.id,
+            invoiceNumber: searchParams.get('invoice_number') || order.id,
+            paymentMethod: order.payment_method_title || 'DOKU Payment Gateway',
+            total: order.total,
+            currency: order.currency,
+            status: order.status
+          });
+
+          // Check if payment is complete
           if (status === 'SUCCESS') {
             setPaymentStatus('success');
-            setOrderDetails({
-              orderId: orderId,
-              paymentMethod: 'DOKU Payment Gateway',
-              paymentCode: paymentCode || '-',
-              status: 'Pembayaran Berhasil'
-            });
-          } else if (status === 'FAILED' || status === 'EXPIRED') {
-            setPaymentStatus('failed');
-            setError('Pembayaran gagal atau kadaluwarsa');
-          } else {
-            setPaymentStatus('pending');
-            setOrderDetails({
-              orderId: orderId,
-              paymentMethod: 'DOKU Payment Gateway',
-              paymentCode: paymentCode || '-',
-              status: 'Menunggu Pembayaran'
-            });
+            setLoading(false);
+            clearPolling();
+            // Clear sessionStorage
+            sessionStorage.removeItem('pendingOrderId');
+            sessionStorage.removeItem('pendingInvoiceNumber');
+            return;
           }
+
+          // Check if payment failed
+          if (status === 'FAILED' || status === 'REFUNDED') {
+            setPaymentStatus('failed');
+            setError(status === 'REFUNDED' ? 'Pembayaran telah di-refund' : 'Pembayaran gagal');
+            setLoading(false);
+            clearPolling();
+            sessionStorage.removeItem('pendingOrderId');
+            sessionStorage.removeItem('pendingInvoiceNumber');
+            return;
+          }
+
+          // If still pending, continue polling
+          setPollCount(prev => {
+            const newCount = prev + 1;
+
+            if (newCount >= MAX_POLLS) {
+              // Max polls reached, show pending with manual refresh option
+              setPaymentStatus('pending');
+              setLoading(false);
+              clearPolling();
+              return newCount;
+            }
+
+            return newCount;
+          });
+
         } else {
-          throw new Error(data.error || 'Failed to verify payment status');
+          throw new Error(data.error || 'Failed to fetch order status');
         }
 
       } catch (err) {
-        console.error('❌ Payment processing error:', err);
-        setLoading(false);
-        setError('Terjadi kesalahan saat memproses pembayaran');
-        setPaymentStatus('error');
+        console.error('❌ Polling error:', err);
+        // Continue polling on error, don't give up immediately
+        setPollCount(prev => {
+          const newCount = prev + 1;
+          if (newCount >= MAX_POLLS) {
+            setPaymentStatus('error');
+            setError(err.message);
+            setLoading(false);
+            clearPolling();
+          }
+          return newCount;
+        });
       }
     };
 
-    processPaymentCallback();
+    // Start polling
+    pollOrderStatus();
+    pollIntervalRef.current = setInterval(pollOrderStatus, POLL_INTERVAL);
+
+    // Cleanup
+    const clearPolling = () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
+    };
+
+    return () => clearPolling();
   }, [searchParams]);
 
   const getStatusIcon = () => {
@@ -103,6 +180,7 @@ export default function CheckoutFinishPage() {
       case 'error':
         return 'Terjadi Kesalahan';
       case 'pending':
+        return 'Menunggu Pembayaran';
       default:
         return 'Memproses Pembayaran...';
     }
@@ -119,7 +197,7 @@ export default function CheckoutFinishPage() {
       case 'pending':
         return 'Pembayaran Anda sedang diproses. Halaman akan diperbarui secara otomatis.';
       default:
-        return 'Sedang memproses status pembayaran...';
+        return `Sedang memproses status pembayaran... (${pollCount}/${MAX_POLLS})`;
     }
   };
 
@@ -148,7 +226,15 @@ export default function CheckoutFinishPage() {
         return (
           <>
             <button
-              onClick={() => router.back()}
+              onClick={() => {
+                setPollCount(0);
+                setLoading(true);
+                setPaymentStatus('processing');
+                const orderId = sessionStorage.getItem('pendingOrderId') || searchParams.get('order_id');
+                if (orderId) {
+                  fetchOrderStatus(orderId);
+                }
+              }}
               className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
             >
               <RefreshCw size={20} />
@@ -164,13 +250,21 @@ export default function CheckoutFinishPage() {
         );
       case 'pending':
         return (
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
-          >
-            <RefreshCw size={20} />
-            Perbarui Status
-          </button>
+          <>
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+            >
+              <RefreshCw size={20} />
+              Perbarui Status
+            </button>
+            <Link
+              href="/orders"
+              className="w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Lihat Pesanan Saya
+            </Link>
+          </>
         );
       default:
         return null;
@@ -183,7 +277,7 @@ export default function CheckoutFinishPage() {
         <div className="text-center">
           <div className="w-20 h-20 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-2xl font-light mb-2">Memproses Pembayaran</h2>
-          <p className="text-gray-600">Mohon tunggu sebentar...</p>
+          <p className="text-gray-600">Mohon tunggu sebentar... ({pollCount}/{MAX_POLLS})</p>
         </div>
       </div>
     );
@@ -215,16 +309,18 @@ export default function CheckoutFinishPage() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Nomor Pesanan:</span>
-                  <span className="font-medium">{orderDetails.orderId}</span>
+                  <span className="font-medium">#{orderDetails.orderId}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Metode Pembayaran:</span>
                   <span className="font-medium">{orderDetails.paymentMethod}</span>
                 </div>
-                {orderDetails.paymentCode && (
+                {orderDetails.total && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Kode Pembayaran:</span>
-                    <span className="font-medium">{orderDetails.paymentCode}</span>
+                    <span className="text-gray-600">Total:</span>
+                    <span className="font-medium">
+                      {orderDetails.currency === 'IDR' ? 'Rp ' : ''}{orderDetails.total}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between">

@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useCart } from "@/hooks/useCart";
-import { useAuth } from "@/hooks/useAuth"; // 1. Import Auth Hook
+import { useAuth } from "@/hooks/useAuth";
 import CheckoutForm from "@/components/Checkout/CheckoutForm";
 import OrderSummary from "@/components/Checkout/OrderSummary";
-import DokuCheckout from "@/components/Checkout/DokuCheckout";
 import { Shield, Truck, Clock, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import CheckoutStepper from "@/components/Checkout/CheckoutStepper";
@@ -15,22 +14,18 @@ import CheckoutStepper from "@/components/Checkout/CheckoutStepper";
 export default function CheckoutPage() {
   const router = useRouter();
   const { cartItems, getCartTotals, getShippingCost, clearCart } = useCart();
-  const { getToken, user } = useAuth(); // 2. Ambil helper Token & User
+  const { getToken, user } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderData, setOrderData] = useState(null);
   const [cartReady, setCartReady] = useState(false);
 
   // Checkout Steps State: 1 = Information, 2 = Payment
   const [currentStep, setCurrentStep] = useState(1);
 
-  // DOKU Checkout states
-  const [showDokuCheckout, setShowDokuCheckout] = useState(false);
+  // Redirect state
+  const [redirecting, setRedirecting] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState(null);
-  const [paymentLoading, setPaymentLoading] = useState(false);
-  // New state to prevent redirect when order is created but payment is in progress
-  const [isPaymentPending, setIsPaymentPending] = useState(false);
 
   const cartTotals = getCartTotals();
   const shippingCost = getShippingCost();
@@ -44,16 +39,28 @@ export default function CheckoutPage() {
   // Redirect to cart if empty
   useEffect(() => {
     if (!cartReady) return;
-    // Don't redirect if order is placed OR if payment is pending (modal open)
-    if (cartItems.length === 0 && !orderPlaced && !isPaymentPending) {
+    if (cartItems.length === 0 && !redirecting) {
       router.push('/cart');
     }
-  }, [cartReady, cartItems.length, orderPlaced, isPaymentPending, router]);
+  }, [cartReady, cartItems.length, redirecting, router]);
+
+  // Handle redirect to payment page
+  useEffect(() => {
+    if (paymentUrl && redirecting) {
+      // Store order ID in sessionStorage for callback handling
+      if (orderData?.orderId) {
+        sessionStorage.setItem('pendingOrderId', orderData.orderId);
+        sessionStorage.setItem('pendingInvoiceNumber', orderData.invoiceNumber);
+      }
+
+      // Full page redirect to DOKU hosted checkout
+      window.location.href = paymentUrl;
+    }
+  }, [paymentUrl, redirecting, orderData]);
 
   // Handler to move between steps
   const handleStepChange = (step) => {
     setCurrentStep(step);
-    // Scroll to top when step changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -67,13 +74,11 @@ export default function CheckoutPage() {
 
       // B. Siapkan Payload sesuai yang dibutuhkan API
       const payload = {
-        // Data items dari cart
         items: cartItems.map(item => ({
           product_id: item.id,
           quantity: item.quantity
         })),
 
-        // Data customer sesuai format WooCommerce
         customer: {
           billing: {
             first_name: formData.firstName || '',
@@ -110,29 +115,24 @@ export default function CheckoutPage() {
             }
         },
 
-        // Payment method info
         paymentMethod: formData.paymentMethod || 'doku',
         dokuPaymentMethod: formData.dokuPaymentMethod || 'VIRTUAL_ACCOUNT',
         dokuPaymentType: formData.dokuPaymentType || 'BCA',
 
-        // Additional data
         shippingCost: shippingCost,
         orderNotes: formData.orderNotes || ''
       };
 
       console.log("📤 Submitting Order Payload:", payload);
 
-      // C. Siapkan Headers
       const headers = {
         'Content-Type': 'application/json',
       };
 
-      // D. LAMPIRKAN TOKEN JIKA ADA (Kunci Integrasi Login)
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      // E. Panggil API Internal Next.js
       const response = await fetch('/api/orders/create', {
         method: 'POST',
         headers: headers,
@@ -147,24 +147,20 @@ export default function CheckoutPage() {
 
       console.log("✅ Order Created:", result);
 
-      // F. Handle Success
       if (result.success && result.payment && result.payment.paymentUrl) {
         console.log("💳 Payment URL received:", result.payment.paymentUrl);
 
-        // Prevent redirect before clearing cart
-        setIsPaymentPending(true);
-
-        // Clear cart setelah order berhasil dibuat
+        // Clear cart after successful order creation
         clearCart();
 
-        // Set order data dan payment URL untuk DOKU modal
+        // Set order data and trigger redirect
         setOrderData({
           orderId: result.order_id,
           invoiceNumber: result.invoice_number
         });
 
         setPaymentUrl(result.payment.paymentUrl);
-        setShowDokuCheckout(true);
+        setRedirecting(true);
 
       } else {
         throw new Error("Invalid payment response received");
@@ -178,35 +174,8 @@ export default function CheckoutPage() {
     }
   };
 
-  // DOKU Checkout handlers
-  const handleDokuSuccess = (response) => {
-    console.log("✅ DOKU Payment Success:", response);
-    setCurrentStep(3); // Move to Finish step
-    setOrderData(prev => ({
-      ...prev,
-      paymentCompleted: true,
-      paymentResponse: response
-    }));
-    // Redirect ke success page atau show success state
-    setTimeout(() => {
-      router.push('/checkout/finish?status=success&order_id=' + orderData.orderId);
-    }, 2000);
-  };
-
-  const handleDokuError = (error) => {
-    console.error("❌ DOKU Payment Error:", error);
-    alert(`Payment Failed: ${error.message || 'Payment could not be processed'}`);
-    setShowDokuCheckout(false);
-  };
-
-  const handleDokuClose = () => {
-    console.log("🔒 DOKU Checkout closed");
-    setShowDokuCheckout(false);
-    // Optionally show retry or return to checkout
-  };
-
   // Tampilan Cart Kosong
-  if (cartReady && cartItems.length === 0 && !orderPlaced) {
+  if (cartReady && cartItems.length === 0 && !redirecting) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -223,8 +192,8 @@ export default function CheckoutPage() {
     );
   }
 
-  // Tampilan Sukses - Menunggu redirect ke DOKU
-  if (orderPlaced) {
+  // Tampilan Redirect - Menunggu redirect ke DOKU
+  if (redirecting) {
     return (
       <>
         <CheckoutStepper currentStep={3} />
@@ -237,14 +206,28 @@ export default function CheckoutPage() {
             <div className="w-20 h-20 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-6"></div>
 
             <h1 className="text-3xl font-light mb-4">
-              {orderData?.redirecting ? 'Redirecting to Payment...' : 'Order Created Successfully!'}
+              Redirecting to Payment...
             </h1>
 
             <p className="text-gray-600 mb-6">
-              {orderData?.redirecting
-                ? 'You will be redirected to the secure payment page in a moment...'
-                : 'Your order has been created successfully.'
-              }
+              You will be redirected to the secure payment page in a moment...
+            </p>
+
+            {orderData && (
+              <div className="bg-gray-50 rounded-lg p-4 text-left">
+                <p className="text-sm text-gray-600">Order ID: {orderData.orderId}</p>
+                <p className="text-sm text-gray-600">Invoice: {orderData.invoiceNumber}</p>
+              </div>
+            )}
+
+            <p className="text-sm text-gray-500 mt-4">
+              If you are not redirected automatically,{' '}
+              <button
+                onClick={() => window.location.href = paymentUrl}
+                className="text-black underline hover:text-gray-700"
+              >
+                click here
+              </button>
             </p>
           </motion.div>
         </div>
@@ -315,27 +298,32 @@ export default function CheckoutPage() {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-4">
-                <OrderSummary
-                  items={cartItems}
-                  totals={cartTotals}
-                  shippingCost={shippingCost}
-                  totalAmount={totalAmount}
-                />
+                {cartReady ? (
+                  <OrderSummary
+                    items={cartItems}
+                    totals={cartTotals}
+                    shippingCost={shippingCost}
+                    totalAmount={totalAmount}
+                  />
+                ) : (
+                  <div className="bg-white rounded-lg shadow-sm border overflow-hidden animate-pulse">
+                    <div className="bg-gray-50 px-6 py-4 border-b h-20" />
+                    <div className="p-4 space-y-4">
+                      <div className="h-20 bg-gray-100 rounded" />
+                      <div className="h-20 bg-gray-100 rounded" />
+                    </div>
+                    <div className="p-6 bg-gray-50 border-t space-y-2">
+                      <div className="h-4 bg-gray-200 rounded" />
+                      <div className="h-4 bg-gray-200 rounded" />
+                      <div className="h-6 bg-gray-300 rounded mt-4" />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* DOKU Checkout Modal */}
-      <DokuCheckout
-        paymentUrl={paymentUrl}
-        isOpen={showDokuCheckout}
-        onClose={handleDokuClose}
-        onSuccess={handleDokuSuccess}
-        onError={handleDokuError}
-        isLoading={paymentLoading}
-      />
     </>
   );
 }
