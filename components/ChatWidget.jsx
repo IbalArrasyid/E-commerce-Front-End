@@ -1,13 +1,15 @@
 'use client'; 
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag } from 'react-icons/fa';
+import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag, FaRedo } from 'react-icons/fa';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [threadId, setThreadId] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const ChatWidget = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
+    if (!inputValue.trim() || isLoading || isStreaming) return;
 
     const userMessage = { 
       id: Date.now(), 
@@ -42,10 +44,15 @@ const ChatWidget = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      // Use existing threadId for continuation, or create new thread
+      const url = threadId
+        ? `http://localhost:8000/chat/${threadId}`
+        : 'http://localhost:8000/chat';
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           message: currentInput,
           userId: 'guest-web-user'
         }),
@@ -55,33 +62,60 @@ const ChatWidget = () => {
 
       const data = await response.json();
 
-      let agentResponse;
-      if (data.products && Array.isArray(data.products)) {
-        agentResponse = {
-          id: Date.now() + 1,
-          text: data.response,
-          isAgent: true,
-          products: data.products
-        };
-      } else {
-        agentResponse = {
-          id: Date.now() + 1,
-          text: data.response,
-          isAgent: true
-        };
+      // Save threadId for subsequent requests (conversation memory)
+      if (data.threadId && !threadId) {
+        setThreadId(data.threadId);
       }
 
-      setMessages(prev => [...prev, agentResponse]);
+      // Reset loading state and start streaming messages
+      setIsLoading(false);
+      setIsStreaming(true);
+
+      // Create three separate chat bubbles with delays
+      const baseId = Date.now();
+
+      // First bubble: Intro text
+      if (data.intro) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        setMessages(prev => [...prev, {
+          id: baseId,
+          text: data.intro,
+          isAgent: true
+        }]);
+      }
+
+      // Second bubble: Product carousel (if products exist)
+      if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setMessages(prev => [...prev, {
+          id: baseId + 1,
+          text: '', // Empty text, just show products
+          isAgent: true,
+          products: data.products
+        }]);
+      }
+
+      // Third bubble: Follow-up text
+      if (data.followUp) {
+        await new Promise(resolve => setTimeout(resolve, 600));
+        setMessages(prev => [...prev, {
+          id: baseId + 2,
+          text: data.followUp,
+          isAgent: true
+        }]);
+      }
+
+      setIsStreaming(false);
 
     } catch (error) {
       console.error('Error:', error);
+      setIsLoading(false);
+      setIsStreaming(false);
       setMessages(prev => [...prev, {
         id: Date.now(),
         text: "Maaf, server sedang sibuk. Mohon coba lagi nanti.",
         isAgent: true
       }]);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -90,6 +124,15 @@ const ChatWidget = () => {
       e.preventDefault();
       handleSendMessage(e);
     }
+  };
+
+  const handleResetChat = () => {
+    setMessages([{
+      id: 'init-1',
+      text: "Halo! Saya asisten virtual Home Decor Indonesia. Ada yang bisa saya bantu?",
+      isAgent: true
+    }]);
+    setThreadId(null);
   };
 
   return (
@@ -117,35 +160,49 @@ const ChatWidget = () => {
               </p>
             </div>
           </div>
-          <button 
-            onClick={() => setIsOpen(false)} 
-            className="p-2 hover:bg-white/10 rounded-full transition-colors"
-          >
-            <FaTimes />
-          </button>
+          <div className="flex items-center gap-1">
+            {threadId && (
+              <button
+                onClick={handleResetChat}
+                title="Mulai percakapan baru"
+                className="p-2 hover:bg-white/10 rounded-full transition-colors text-green-400"
+              >
+                <FaRedo className="text-sm" />
+              </button>
+            )}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <FaTimes />
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 bg-gray-50 p-4 overflow-y-auto">
           <div className="flex flex-col gap-3">
             {messages.map((msg, index) => (
               <div key={msg.id || index}>
-                <div 
-                  className={`max-w-[85%] p-3 text-sm rounded-2xl shadow-sm ${
-                    msg.isAgent 
-                      ? 'bg-white border border-gray-200 text-gray-700 self-start rounded-bl-none' 
-                      : 'bg-slate-800 text-white self-end rounded-br-none ml-auto'
-                  }`}
-                >
-                  {msg.text}
-                </div>
-                
+                {/* Only render text bubble if there's text content */}
+                {msg.text && (
+                  <div
+                    className={`max-w-[85%] p-3 text-sm rounded-2xl shadow-sm ${
+                      msg.isAgent
+                        ? 'bg-white border border-gray-200 text-gray-700 self-start rounded-bl-none'
+                        : 'bg-slate-800 text-white self-end rounded-br-none ml-auto'
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                )}
+
                 {msg.products && msg.products.length > 0 && (
                   <ProductCarousel products={msg.products} />
                 )}
               </div>
             ))}
             
-            {isLoading && (
+            {(isLoading || isStreaming) && (
               <div className="self-start bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-1 w-16">
                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></div>
@@ -164,14 +221,14 @@ const ChatWidget = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            disabled={isLoading}
+            disabled={isLoading || isStreaming}
           />
           <button
             onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isLoading}
+            disabled={!inputValue.trim() || isLoading || isStreaming}
             className={`
               p-3 rounded-full text-white transition-all shadow-md flex items-center justify-center
-              ${!inputValue.trim() || isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-700 hover:scale-105'}
+              ${!inputValue.trim() || isLoading || isStreaming ? 'bg-gray-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-700 hover:scale-105'}
             `}
           >
             <FaPaperPlane className="ml-[-2px]" />
