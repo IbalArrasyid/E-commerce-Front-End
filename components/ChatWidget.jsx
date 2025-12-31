@@ -1,9 +1,13 @@
-'use client'; 
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag, FaRedo } from 'react-icons/fa';
 
+const STORAGE_KEY = 'homedecor_chat';
+
 const ChatWidget = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -11,6 +15,31 @@ const ChatWidget = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [threadId, setThreadId] = useState(null);
   const messagesEndRef = useRef(null);
+
+  // Load chat from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const { messages: savedMessages, threadId: savedThreadId } = JSON.parse(saved);
+        if (savedMessages && savedMessages.length > 0) {
+          setMessages(savedMessages);
+        }
+        if (savedThreadId) {
+          setThreadId(savedThreadId);
+        }
+      } catch (e) {
+        console.error('Error loading chat from localStorage:', e);
+      }
+    }
+  }, []);
+
+  // Save chat to localStorage when messages or threadId change
+  useEffect(() => {
+    if (messages.length > 0 || threadId) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ messages, threadId }));
+    }
+  }, [messages, threadId]);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -32,12 +61,12 @@ const ChatWidget = () => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading || isStreaming) return;
 
-    const userMessage = { 
-      id: Date.now(), 
-      text: inputValue, 
-      isAgent: false 
+    const userMessage = {
+      id: Date.now(),
+      text: inputValue,
+      isAgent: false
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     const currentInput = inputValue;
     setInputValue("");
@@ -133,11 +162,26 @@ const ChatWidget = () => {
       isAgent: true
     }]);
     setThreadId(null);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
+  // Navigate to product page when product is clicked
+  const handleProductClick = (product) => {
+    // Close chat widget and navigate to product page using name as slug
+    setIsOpen(false);
+    // Convert product name to URL-friendly slug
+    const slug = product.item_name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+      .replace(/\s+/g, '-')          // Replace spaces with hyphens
+      .replace(/-+/g, '-')           // Remove consecutive hyphens
+      .trim();
+    router.push(`/product/${slug}`);
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
-      
+
       <div className={`
         flex flex-col
         fixed bottom-[90px] right-6 
@@ -146,7 +190,7 @@ const ChatWidget = () => {
         transition-all duration-300 origin-bottom-right
         ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}
       `}>
-        
+
         <div className="bg-slate-900 p-4 flex justify-between items-center text-white shadow-md">
           <div className="flex items-center gap-3">
             <div className="bg-white/10 p-2 rounded-full">
@@ -186,27 +230,26 @@ const ChatWidget = () => {
                 {/* Only render text bubble if there's text content */}
                 {msg.text && (
                   <div
-                    className={`max-w-[85%] p-3 text-sm rounded-2xl shadow-sm ${
-                      msg.isAgent
-                        ? 'bg-white border border-gray-200 text-gray-700 self-start rounded-bl-none'
-                        : 'bg-slate-800 text-white self-end rounded-br-none ml-auto'
-                    }`}
+                    className={`max-w-[85%] p-3 text-sm rounded-2xl shadow-sm ${msg.isAgent
+                      ? 'bg-white border border-gray-200 text-gray-700 self-start rounded-bl-none'
+                      : 'bg-slate-800 text-white self-end rounded-br-none ml-auto'
+                      }`}
                   >
                     {msg.text}
                   </div>
                 )}
 
                 {msg.products && msg.products.length > 0 && (
-                  <ProductCarousel products={msg.products} />
+                  <ProductCarousel products={msg.products} onProductClick={handleProductClick} />
                 )}
               </div>
             ))}
-            
+
             {(isLoading || isStreaming) && (
               <div className="self-start bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-1 w-16">
-                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></div>
-                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></div>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -265,7 +308,7 @@ const formatIDR = (value) => {
 }
 
 
-const ProductCarousel = ({ products }) => {
+const ProductCarousel = ({ products, onProductClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
@@ -284,9 +327,18 @@ const ProductCarousel = ({ products }) => {
 
   const currentProduct = products[currentIndex];
 
+  const handleProductClick = () => {
+    if (onProductClick && currentProduct) {
+      onProductClick(currentProduct);
+    }
+  };
+
   return (
     <div className="mt-3 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-      <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 h-48 flex items-center justify-center">
+      <div
+        className="relative bg-gradient-to-br from-slate-100 to-slate-200 h-48 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+        onClick={handleProductClick}
+      >
         {currentProduct.images.length > 1 && (
           <>
             <button
@@ -318,9 +370,8 @@ const ProductCarousel = ({ products }) => {
             <div
               key={idx}
               onClick={() => setCurrentImageIndex(idx)}
-              className={`h-1.5 rounded-full cursor-pointer transition-all ${
-                idx === currentImageIndex ? 'w-5 bg-slate-700' : 'w-1.5 bg-slate-300'
-              }`}
+              className={`h-1.5 rounded-full cursor-pointer transition-all ${idx === currentImageIndex ? 'w-5 bg-slate-700' : 'w-1.5 bg-slate-300'
+                }`}
             />
           ))}
         </div>
@@ -395,9 +446,8 @@ const ProductCarousel = ({ products }) => {
             {products.map((_, idx) => (
               <div
                 key={idx}
-                className={`h-1.5 rounded-full transition-all ${
-                  idx === currentIndex ? 'w-6 bg-slate-700' : 'w-1.5 bg-slate-300'
-                }`}
+                className={`h-1.5 rounded-full transition-all ${idx === currentIndex ? 'w-6 bg-slate-700' : 'w-1.5 bg-slate-300'
+                  }`}
               />
             ))}
           </div>
