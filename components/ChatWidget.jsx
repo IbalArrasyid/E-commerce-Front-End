@@ -1,14 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-<<<<<<< Updated upstream
 import { useRouter } from 'next/navigation';
 import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag, FaRedo } from 'react-icons/fa';
 
 const STORAGE_KEY = 'homedecor_chat';
-=======
-import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag, FaRedo } from 'react-icons/fa';
->>>>>>> Stashed changes
 
 const ChatWidget = () => {
   const router = useRouter();
@@ -162,8 +158,7 @@ const ChatWidget = () => {
   const handleResetChat = () => {
     setMessages([{
       id: 'init-1',
-<<<<<<< Updated upstream
-      text: "Halo! Saya asisten virtual Home Decor Indonesia. Ada yang bisa saya bantu?",
+      text: "Hello! I am Home Decor Indonesia's virtual assistant. How can I help you?",
       isAgent: true
     }]);
     setThreadId(null);
@@ -187,18 +182,7 @@ const ChatWidget = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
 
-=======
-      text: "Hello! I am Home Decor Indonesia's virtual assistant. How can I help you?",
-      isAgent: true
-    }]);
-    setThreadId(null);
-  };
 
-  return (
-    <div className="fixed bottom-6 right-6 z-50">
-
-      {/* Chat Window */}
->>>>>>> Stashed changes
       <div className={`
         flex flex-col
         fixed bottom-24 right-6 
@@ -225,11 +209,7 @@ const ChatWidget = () => {
             {threadId && (
               <button
                 onClick={handleResetChat}
-<<<<<<< Updated upstream
-                title="Mulai percakapan baru"
-=======
                 title="Start new conversation"
->>>>>>> Stashed changes
                 className="p-2 hover:bg-white/10 rounded-full transition-colors text-green-400"
               >
                 <FaRedo className="text-sm" />
