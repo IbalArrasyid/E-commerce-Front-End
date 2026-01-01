@@ -14,7 +14,7 @@ import CheckoutStepper from "@/components/Checkout/CheckoutStepper";
 export default function CheckoutPage() {
   const router = useRouter();
   const { cartItems, getCartTotals, getShippingCost, clearCart } = useCart();
-  const { getToken, user } = useAuth();
+  const { getToken, user, isLoading: authLoading } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const [orderData, setOrderData] = useState(null);
@@ -35,6 +35,12 @@ export default function CheckoutPage() {
   useEffect(() => {
     setCartReady(true);
   }, []);
+
+  useEffect(() => {
+  if (!authLoading && !user) {
+    router.push('/my-account');
+  }
+  }, [authLoading, user, router]);
 
   // Redirect to cart if empty
   useEffect(() => {
@@ -133,7 +139,7 @@ export default function CheckoutPage() {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch('/api/orders/create', {
+      const response = await fetch('/api/orders', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(payload)
@@ -147,24 +153,22 @@ export default function CheckoutPage() {
 
       console.log("✅ Order Created:", result);
 
-      if (result.success && result.payment && result.payment.paymentUrl) {
-        console.log("💳 Payment URL received:", result.payment.paymentUrl);
+      if (result.success && result.redirect_url) {
+        console.log("💳 Payment URL received:", result.redirect_url);
 
-        // Clear cart after successful order creation
         clearCart();
 
-        // Set order data and trigger redirect
         setOrderData({
-          orderId: result.order_id,
-          invoiceNumber: result.invoice_number
+          orderId: result.order_id
         });
 
-        setPaymentUrl(result.payment.paymentUrl);
+        setPaymentUrl(result.redirect_url);
         setRedirecting(true);
 
       } else {
-        throw new Error("Invalid payment response received");
+        throw new Error("Redirect URL not found in response");
       }
+
 
     } catch (error) {
       console.error("❌ Checkout Error:", error);
@@ -173,6 +177,16 @@ export default function CheckoutPage() {
       setIsLoading(false);
     }
   };
+
+    // --- JSX return ---
+  if (authLoading || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
 
   // Tampilan Cart Kosong
   if (cartReady && cartItems.length === 0 && !redirecting) {

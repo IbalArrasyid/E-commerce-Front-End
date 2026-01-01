@@ -16,7 +16,7 @@ export default function CheckoutFinishPage() {
   const pollIntervalRef = useRef(null);
 
   // Maximum number of polls before giving up
-  const MAX_POLLS = 30; // 30 * 2 seconds = 1 minute max wait
+  const MAX_POLLS = 3; 
   const POLL_INTERVAL = 2000; // 2 seconds
 
   /**
@@ -100,7 +100,7 @@ export default function CheckoutFinishPage() {
           // Check if payment failed
           if (status === 'FAILED' || status === 'REFUNDED') {
             setPaymentStatus('failed');
-            setError(status === 'REFUNDED' ? 'Pembayaran telah di-refund' : 'Pembayaran gagal');
+            setError(status === 'REFUNDED' ? 'Payment has been refunded' : 'Payment failed');
             setLoading(false);
             clearPolling();
             sessionStorage.removeItem('pendingOrderId');
@@ -174,30 +174,30 @@ export default function CheckoutFinishPage() {
   const getStatusTitle = () => {
     switch (paymentStatus) {
       case 'success':
-        return 'Pembayaran Berhasil!';
+        return 'Payment Success!';
       case 'failed':
-        return 'Pembayaran Gagal';
+        return 'Payment Failed';
       case 'error':
-        return 'Terjadi Kesalahan';
+        return 'An Error Occurred';
       case 'pending':
-        return 'Menunggu Pembayaran';
+        return 'Waiting for Payment';
       default:
-        return 'Memproses Pembayaran...';
+        return 'Processing Payment...';
     }
   };
 
   const getStatusMessage = () => {
     switch (paymentStatus) {
       case 'success':
-        return 'Terima kasih! Pesanan Anda telah berhasil dibayar dan akan segera diproses.';
+        return 'Thank you! Your order has been successfully paid and will be processed shortly.';
       case 'failed':
-        return 'Maaf, pembayaran Anda gagal. Silakan coba lagi atau hubungi customer service.';
+        return 'Sorry, your payment failed. Please try again or contact customer service.';
       case 'error':
-        return error || 'Terjadi kesalahan saat memproses pembayaran.';
+        return error || 'An error occurred while processing your payment.';
       case 'pending':
-        return 'Pembayaran Anda sedang diproses. Halaman akan diperbarui secara otomatis.';
+        return 'Your payment is being processed. The page will update automatically.';
       default:
-        return `Sedang memproses status pembayaran... (${pollCount}/${MAX_POLLS})`;
+        return `Processing payment status... (${pollCount}/${MAX_POLLS})`;
     }
   };
 
@@ -211,13 +211,13 @@ export default function CheckoutFinishPage() {
               className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
             >
               <Home size={20} />
-              Kembali ke Beranda
+              Back to Home
             </Link>
             <Link
-              href="/orders"
+              href="/my-account?tab=orders"
               className="w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
             >
-              Lihat Pesanan Saya
+              View My Orders
             </Link>
           </>
         );
@@ -238,13 +238,13 @@ export default function CheckoutFinishPage() {
               className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
             >
               <RefreshCw size={20} />
-              Coba Lagi
+              Try Again
             </button>
-            <Link
+             <Link
               href="/cart"
-              className="w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              className="w-auto border border-gray-300 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
             >
-              Kembali ke Keranjang
+              Back to Cart
             </Link>
           </>
         );
@@ -256,14 +256,15 @@ export default function CheckoutFinishPage() {
               className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
             >
               <RefreshCw size={20} />
-              Perbarui Status
+              Update Status Payment
             </button>
             <Link
-              href="/orders"
-              className="w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              href="/my-account?tab=orders"
+              className="w-auto border border-gray-300 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
             >
-              Lihat Pesanan Saya
+              View My Orders
             </Link>
+
           </>
         );
       default:
@@ -276,8 +277,8 @@ export default function CheckoutFinishPage() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-20 h-20 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-light mb-2">Memproses Pembayaran</h2>
-          <p className="text-gray-600">Mohon tunggu sebentar... ({pollCount}/{MAX_POLLS})</p>
+          <h2 className="text-2xl font-light mb-2">Processing Payment</h2>
+          <p className="text-gray-600">Please wait a moment... ({pollCount}/{MAX_POLLS})</p>
         </div>
       </div>
     );
@@ -344,7 +345,7 @@ export default function CheckoutFinishPage() {
           {/* Help Section */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-600 mb-2">
-              Butuh bantuan? Hubungi kami:
+              Need help? Contact us:
             </p>
             <div className="flex justify-center space-x-4 text-sm">
               <a

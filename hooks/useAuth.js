@@ -149,21 +149,16 @@ export const AuthProvider = ({ children }) => {
 
   // 4. Logout Function
   const logout = async () => {
-    try {
-      // Opsional: Panggil API logout jika Anda menggunakan HTTPOnly Cookies di server
-      // await fetch('/api/auth/logout', { method: 'POST' });
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      // Bersihkan State & Storage
-      setUser(null);
-      setIsAuthenticated(false);
-      localStorage.removeItem('homedecor_token');
-      
-      // Refresh halaman opsional, untuk memastikan semua komponen reset
-      // window.location.href = '/'; 
-    }
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    localStorage.removeItem('homedecor_token'); 
+    setUser(null);
+    setIsAuthenticated(false);
   };
+
 
   // Helper untuk mendapatkan token (berguna untuk API call lain)
   const getToken = () => {

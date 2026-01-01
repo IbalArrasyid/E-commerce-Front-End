@@ -253,7 +253,7 @@ export default function ProductCard({
           {/* Product Info */}
           <div className="flex-1 flex flex-col justify-between">
             <div>
-              <h3 className="text-lg font-medium leading-tight mb-2 font-[Futura]">
+              <h3 className="text-lg font-medium leading-tight mb-2">
                 {product.name}
               </h3>
               <p className="text-gray-600 text-sm mb-4 line-clamp-3">
@@ -470,7 +470,7 @@ export default function ProductCard({
 
       {/* Product Info */}
       <div className="mt-3">
-        <h3 className="text-sm font-medium leading-tight mb-2 line-clamp-2 font-[Futura]">
+        <h3 className="text-sm font-medium leading-tight mb-2 line-clamp-2">
           {product.name}
         </h3>
 

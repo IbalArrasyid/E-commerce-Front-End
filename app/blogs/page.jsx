@@ -14,7 +14,7 @@ export default async function BlogPage() {
       <div className="bg-white">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-[Futura] font-bold text-gray-900 sm:text-5xl">
+            <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
               Our Blog
             </h1>
             <p className="mt-4 text-xl text-gray-500">
@@ -70,7 +70,7 @@ export default async function BlogPage() {
 
                   {/* Title */}
                   <h2
-                    className="mt-2 text-xl font-[Futura] font-semibold text-gray-900 group-hover:text-primary transition-colors duration-300 line-clamp-2"
+                    className="mt-2 text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-300 line-clamp-2"
                     dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                   />
 

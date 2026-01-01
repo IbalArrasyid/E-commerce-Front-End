@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -11,12 +11,23 @@ import {
   MapPin, 
   User, 
   LogOut,
-  ArrowRightLeft // Icon untuk Compare (opsional)
+  Search,
+  Package,
+  CreditCard,
+  ArrowRightLeft 
 } from 'lucide-react';
 
 export default function MyAccountPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
+
   const {
     user,
     isAuthenticated,
@@ -28,8 +39,111 @@ export default function MyAccountPage() {
   } = useAuth();
 
 
+  const fetchOrders = async () => {
+  try {
+    setLoadingOrders(true);
+
+    const token = localStorage.getItem("homedecor_token");
+    if (!token) {
+      console.error("NO TOKEN IN LOCALSTORAGE");
+      return;
+    }
+
+    const res = await fetch("/api/orders/user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error("Unauthorized");
+    }
+
+    const data = await res.json();
+    setOrders(data.orders || []);
+    setSelectedOrder(data.orders?.[0] || null);
+
+  } catch (err) {
+    console.error("Fetch orders failed:", err);
+  } finally {
+    setLoadingOrders(false);
+  }
+};
+
+
   // State untuk Tab Navigasi Dashboard
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    router.replace(`/my-account?tab=${tab}`, { scroll: false });
+  };
+
+
+  // ORDERS STATE
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const filteredOrders = orders.filter(order => {
+    const dokuInvoice =
+      order.meta_data?.find(md => md.key === 'doku_invoice')?.value || '';
+
+    const search = searchTerm.toLowerCase();
+
+    const matchesSearch =
+      order.number?.toString().includes(search) ||
+      dokuInvoice.toLowerCase().includes(search);
+
+    const matchesStatus =
+      statusFilter === 'all' || order.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastOrder = currentPage * 3;
+  const indexOfFirstOrder = indexOfLastOrder - 3;
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(filteredOrders.length / 3);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
+
+
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'processing': return 'bg-blue-100 text-blue-800';
+      case 'completed': return 'bg-green-100 text-green-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'pending': return 'Waiting for Payment';
+      case 'processing': return 'Processing';
+      case 'completed': return 'Completed';
+      case 'cancelled': return 'Cancelled';
+      default: return status;
+    }
+  };
+  
+  useEffect(() => {
+    if (activeTab === 'orders') {
+      fetchOrders();
+    }
+  }, [activeTab]);
+
 
   // State untuk Form Login/Register
   const [formData, setFormData] = useState({
@@ -160,7 +274,7 @@ export default function MyAccountPage() {
               <ul className="space-y-1">
                 <li>
                   <button
-                    onClick={() => setActiveTab('dashboard')}
+                    onClick={() => handleTabChange('dashboard')}
                     className={`w-full text-left py-3 px-0 flex items-center justify-between group ${activeTab === 'dashboard' ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'}`}
                   >
                     <span>Dashboard</span>
@@ -170,7 +284,7 @@ export default function MyAccountPage() {
                 </li>
                 <li>
                   <button
-                    onClick={() => setActiveTab('orders')}
+                    onClick={() => handleTabChange('orders')}
                     className={`w-full text-left py-3 px-0 flex items-center justify-between group ${activeTab === 'orders' ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'}`}
                   >
                     <span>Orders</span>
@@ -180,7 +294,7 @@ export default function MyAccountPage() {
                 </li>
                 <li>
                   <button
-                    onClick={() => setActiveTab('downloads')}
+                    onClick={() => handleTabChange('downloads')}
                     className={`w-full text-left py-3 px-0 flex items-center justify-between group ${activeTab === 'downloads' ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'}`}
                   >
                     <span>Downloads</span>
@@ -190,7 +304,7 @@ export default function MyAccountPage() {
                 </li>
                 <li>
                   <button
-                    onClick={() => setActiveTab('address')}
+                    onClick={() => handleTabChange('address')}
                     className={`w-full text-left py-3 px-0 flex items-center justify-between group ${activeTab === 'address' ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'}`}
                   >
                     <span>Address</span>
@@ -200,7 +314,7 @@ export default function MyAccountPage() {
                 </li>
                 <li>
                   <button
-                    onClick={() => setActiveTab('account-details')}
+                    onClick={() => handleTabChange('account-details')}
                     className={`w-full text-left py-3 px-0 flex items-center justify-between group ${activeTab === 'account-details' ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'}`}
                   >
                     <span>Account details</span>
@@ -210,7 +324,7 @@ export default function MyAccountPage() {
                 </li>
                 {/* <li>
                   <button
-                    onClick={() => setActiveTab('compare')}
+                    onClick={() => handleTabChange('compare')}
                     className={`w-full text-left py-3 px-0 flex items-center justify-between group ${activeTab === 'compare' ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'}`}
                   >
                     <span>Compare</span>
@@ -241,21 +355,222 @@ export default function MyAccountPage() {
                     Hello <span className="font-semibold text-black">{user?.username || user?.email?.split('@')[0]}</span> (not <span className="font-semibold">{user?.username || user?.email?.split('@')[0]}</span>? <button onClick={handleLogout} className="text-black underline hover:text-gray-600">Log out</button>)
                   </p>
                   <p className="text-gray-600 leading-relaxed">
-                    From your account dashboard you can view your <button onClick={() => setActiveTab('orders')} className="text-black underline">recent orders</button>, manage your <button onClick={() => setActiveTab('address')} className="text-black underline">billing address</button>, and <button onClick={() => setActiveTab('account-details')} className="text-black underline">edit your password and account details</button>.
+                    From your account dashboard you can view your <button onClick={() => handleTabChange('orders')} className="text-black underline">recent orders</button>, manage your <button onClick={() => handleTabChange('address')} className="text-black underline">billing address</button>, and <button onClick={() => handleTabChange('account-details')} className="text-black underline">edit your account details</button>.
                   </p>
                 </div>
               )}
 
               {/* ORDERS CONTENT (Placeholder) */}
               {activeTab === 'orders' && (
-                <div>
-                  <h2 className="text-2xl font-light mb-6">Orders</h2>
-                  <div className="bg-gray-50 p-4 rounded text-center text-gray-500">
-                    No orders has been made yet.
-                    <Link href="/shop" className="block mt-2 text-black underline">Go Shop</Link>
+              <div>
+                <h2 className="text-2xl font-light mb-4">My Orders</h2>
+
+                {/* Filters */}
+                <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                      type="text"
+                      placeholder="Search by order number..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                  </div>
+                  <div className="sm:w-48">
+                    <select
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                      <option value="all">All Status</option>
+                      <option value="pending">Waiting for Payment</option>
+                      <option value="processing">Processing</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
                   </div>
                 </div>
-              )}
+
+                {/* Orders List */}
+                {loadingOrders ? (
+                  <div className="flex justify-center py-12">
+                    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                  </div>
+                ) : filteredOrders.length === 0 ? (
+                  <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+                    <Package className="mx-auto text-gray-400 mb-4" size={64} />
+                    <h3 className="text-xl font-medium text-gray-900 mb-2">No orders found</h3>
+                    <p className="text-gray-600 mb-6">
+                      {searchTerm || statusFilter !== 'all'
+                        ? 'Try adjusting your filters or search terms'
+                        : "You haven't placed any orders yet"}
+                    </p>
+                    <Link
+                      href="/shop"
+                      className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                    >
+                      Start Shopping
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {currentOrders.map((order) => (
+                    <div key={order.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                      <div className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="text-lg font-medium text-gray-900">
+                                Order #{order.number}
+                              </h3>
+                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                                {getStatusText(order.status)}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                              Invoice: {order.invoice || '-'}
+                            </p>
+                          </div>
+                          <div className="text-right mt-4 sm:mt-0">
+                            <p className="text-lg font-medium text-gray-900">
+                              Rp {Number(order.total || 0).toLocaleString('id-ID')}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              {new Date(order.date_created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <CreditCard size={16} /> {order.payment_method || '-'}
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Package size={16} /> {order.line_items?.length || 0} item{order.line_items?.length > 1 ? 's' : ''}
+                          </div>
+                          <div className="flex gap-2">
+                            {order.status === 'pending' && order.payment_url && (
+                              <a
+                                href={order.payment_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                              >
+                                Pay Now
+                              </a>
+                            )}
+                            <button
+                              onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
+                              className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                            >
+                              View
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* ORDER DETAILS */}
+                        {selectedOrder?.id === order.id && (
+                          <div className="mt-6 border rounded-lg bg-gray-50 overflow-hidden">
+
+                            {/* HEADER */}
+                            <div className="px-6 py-4 bg-white border-b">
+                              <h4 className="text-lg font-medium text-gray-900">
+                                Order #{order.number}
+                              </h4>
+                              <p className="text-sm text-gray-600">
+                                Invoice: {order.invoice || '-'}
+                              </p>
+                            </div>
+
+                            {/* ITEMS */}
+                            <div className="divide-y">
+                              {order.line_items.map(item => (
+                                <div key={item.id} className="flex gap-4 p-6 bg-white">
+
+                                  {/* IMAGE */}
+                                  {item.image?.src ? (
+                                    <img
+                                      src={item.image.src}
+                                      alt={item.name}
+                                      className="w-20 h-20 object-cover rounded border"
+                                    />
+                                  ) : (
+                                    <div className="w-20 h-20 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                                      No Image
+                                    </div>
+                                  )}
+
+                                  {/* INFO */}
+                                  <div className="flex-1">
+                                    <p className="font-medium text-gray-900">{item.name}</p>
+                                    <p className="text-sm text-gray-600">
+                                      Qty: {item.quantity}
+                                    </p>
+                                    <p className="text-sm text-gray-600">
+                                      Price: Rp {Number(item.price).toLocaleString('id-ID')}
+                                    </p>
+                                  </div>
+
+                                  {/* TOTAL */}
+                                  <div className="text-right font-medium text-gray-900">
+                                    Rp {Number(item.total).toLocaleString('id-ID')}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* SUMMARY */}
+                            <div className="px-6 py-4 bg-gray-100 text-sm">
+                              <div className="flex justify-between mb-2">
+                                <span>Payment Method</span>
+                                <span className="font-medium">{order.payment_method}</span>
+                              </div>
+
+                              <div className="flex justify-between mb-2">
+                                <span>Status</span>
+                                <span className="font-medium">{getStatusText(order.status)}</span>
+                              </div>
+
+                              <div className="flex justify-between border-t pt-2 mt-2 text-base font-semibold">
+                                <span>Total</span>
+                                <span>
+                                  Rp {Number(order.total).toLocaleString('id-ID')}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Pagination */}
+                  {filteredOrders.length > 3 && (
+                  <div className="flex justify-between mt-6">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-gray-700">Page {currentPage} of {totalPages}</span>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+
+                  </div>
+                )}
+              </div>
+            )}
 
               {/* DOWNLOADS CONTENT (Placeholder) */}
               {activeTab === 'downloads' && (

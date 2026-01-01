@@ -8,10 +8,10 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { AuthProvider } from "@/hooks/useAuth";
 import ChatWidget from "@/components/ChatWidget";
 
-const futuraBook = localFont({
-  src: './fonts/Futura-Book.ttf',
+const GeistMonoVF = localFont({
+  src: './fonts/GeistMonoVF.woff',
   display: 'swap',
-  variable: '--font-futura-book',
+  variable: '--font-geist-mono',
 })
 
 export const metadata = {
@@ -45,13 +45,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${futuraBook.variable} antialiased`}
+        className={`${GeistMonoVF.variable} antialiased`}
       >
         <Theme>
           <AuthProvider>
             <Header />
             {children}
-            <WhatsAppFloating />
             <ChatWidget />
             <BottomNavigation />
             <Footer />
