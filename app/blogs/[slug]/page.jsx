@@ -2,9 +2,14 @@ import Link from 'next/link';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import ShareButtons from './ShareButtons';
+import CommentForm from "@/components/CommentForm";
+import { cookies } from 'next/headers';
 
 export default async function BlogPostPage({ params }) {
   const { slug } = params;
+  const cookieStore = cookies();
+  const token = cookieStore.get('homedecor_session')?.value;
+  const isLoggedIn = !!token;
 
   // Fetch the single post
   const res = await fetch(
@@ -23,6 +28,16 @@ export default async function BlogPostPage({ params }) {
   }
 
   const post = posts[0];
+
+  const commentsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_WC_STORE_URL}/wp-json/wp/v2/comments?post=${post.id}&per_page=100`,
+    {
+      cache: 'no-store', 
+    }
+  );
+
+  const comments = commentsRes.ok ? await commentsRes.json() : [];
+
 
   // Extract author and category data
   const author = post._embedded?.author?.[0];
@@ -125,7 +140,7 @@ export default async function BlogPostPage({ params }) {
         <div className="py-8 md:py-12">
           <div
             className="prose prose-lg max-w-none
-              prose-headings:font-[Futura] prose-headings:font-bold prose-headings:text-gray-900
+              prose-headings:font prose-headings:font-bold prose-headings:text-gray-900
               prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
               prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
               prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
@@ -144,6 +159,49 @@ export default async function BlogPostPage({ params }) {
             dangerouslySetInnerHTML={{ __html: post.content.rendered }}
           />
         </div>
+
+        {/* Comments Section */}
+        <div className="py-10 border-t border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-900 mb-6">
+            Comments ({comments.length})
+          </h3>
+
+          {comments.length === 0 ? (
+            <p className="text-gray-500 text-sm">No comments yet. Be the first!</p>
+          ) : (
+            <div className="space-y-6">
+              {comments.map((comment) => (
+                <div key={comment.id} className="flex gap-4">
+                  <img
+                    src={comment.author_avatar_urls?.['48']}
+                    alt={comment.author_name}
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="font-medium text-gray-900">
+                        {comment.author_name}
+                      </span>
+                      <span className="text-gray-400">
+                        {new Date(comment.date).toLocaleDateString('id-ID')}
+                      </span>
+                    </div>
+                    <div
+                      className="prose prose-sm max-w-none mt-1"
+                      dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <CommentForm
+          postId={post.id}
+          isLoggedIn={isLoggedIn}
+        />
+
+
 
         {/* Tags */}
         {post._embedded?.['wp:term']?.[1] && post._embedded['wp:term'][1].length > 0 && (

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 
 export async function GET(request) {
   try {
@@ -7,59 +8,59 @@ export async function GET(request) {
       return NextResponse.json({ success: false }, { status: 401 });
     }
 
-    const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+    const token = authHeader.replace('Bearer ', '');
 
-    // 1️⃣ Get WordPress User
-    const wpRes = await fetch(`${wpUrl}/wp-json/wp/v2/users/me`, {
-      headers: { Authorization: authHeader },
-      cache: 'no-store'
-    });
+    // 1️⃣ DECODE JWT (TIDAK VERIFY, HANYA BACA)
+    const decoded = jwt.decode(token);
 
-    if (!wpRes.ok) {
+    const userId = decoded?.data?.user?.id;
+    if (!userId) {
       return NextResponse.json({ success: false }, { status: 401 });
     }
 
-    const wpUser = await wpRes.json();
-
-    // 2️⃣ Get WooCommerce Customer
+    const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
     const ck = process.env.WC_FULL_KEY;
     const cs = process.env.WC_FULL_SECRET;
 
+    // 2️⃣ AMBIL CUSTOMER LANGSUNG BY ID
     const wcRes = await fetch(
-      `${wpUrl}/wp-json/wc/v3/customers/${wpUser.id}`,
+      `${wpUrl}/wp-json/wc/v3/customers/${userId}`,
       {
         headers: {
           Authorization:
             'Basic ' + Buffer.from(`${ck}:${cs}`).toString('base64'),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        cache: 'no-store'
+        cache: 'no-store',
       }
     );
 
-    const customer = wcRes.ok ? await wcRes.json() : null;
+    if (!wcRes.ok) {
+      return NextResponse.json({ success: false }, { status: 401 });
+    }
 
-    // 3️⃣ FINAL USER OBJECT (MERGED)
+    const customer = await wcRes.json();
+
+    // 3️⃣ FINAL USER OBJECT
     const user = {
-      id: wpUser.id,
-      email: wpUser.email || customer?.email,
-      firstName: wpUser.first_name || customer?.first_name || '',
-      lastName: wpUser.last_name || customer?.last_name || '',
-      username: wpUser.slug,
+      id: customer.id,
+      email: customer.email,
+      firstName: customer.first_name,
+      lastName: customer.last_name,
+      username: customer.username || customer.email.split('@')[0],
       displayName:
-        wpUser.first_name || wpUser.last_name
-          ? `${wpUser.first_name} ${wpUser.last_name}`.trim()
-          : wpUser.name,
-      role: wpUser.roles?.[0] || 'customer',
+        `${customer.first_name} ${customer.last_name}`.trim() ||
+        customer.email,
+      role: 'customer',
 
-      billing: customer?.billing || null,
-      shipping: customer?.shipping || null
+      billing: customer.billing || null,
+      shipping: customer.shipping || null,
     };
 
     return NextResponse.json({ success: true, user });
 
   } catch (err) {
-    console.error(err);
+    console.error('JWT-only user details error:', err);
     return NextResponse.json(
       { success: false, error: 'Internal error' },
       { status: 500 }

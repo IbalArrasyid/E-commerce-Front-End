@@ -67,7 +67,10 @@ const CheckoutForm = ({
   };
 
   const handleContinueToPayment = () => {
-    if (validateInfoStep()) {
+    console.log('👉 CONTINUE CLICKED');
+    const valid = validateInfoStep();
+    console.log('👉 VALIDATION RESULT:', valid);
+    if (valid) {
       onStepChange(2);
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -89,14 +92,22 @@ const CheckoutForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateInfoStep()) {
-      const finalFormData = {
-        ...formData,
-        shippingAddress: formData.shippingSameAsBilling ? formData.billingAddress : formData.shippingAddress
-      };
-      onSubmit(finalFormData);
-    }
+
+    console.log('🔥 HANDLE SUBMIT MASUK');
+
+    const finalFormData = {
+      ...formData,
+      shippingAddress: formData.shippingSameAsBilling
+        ? formData.billingAddress
+        : formData.shippingAddress
+    };
+
+    console.log('🔥 FINAL DATA:', finalFormData);
+
+    onSubmit(finalFormData);
   };
+
+
 
   // Helper for Payment Options
   const PaymentOption = ({ label, method, type, icon }) => (
@@ -198,10 +209,13 @@ const CheckoutForm = ({
 
       {/* STEP 2: PAYMENT */}
       <motion.div
-        initial={false}
-        animate={currentStep === 2 ? "open" : "collapsed"}
-        className={`bg-white rounded-xl shadow-sm border overflow-hidden ${currentStep === 2 ? 'ring-1 ring-black/5' : 'opacity-40 pointer-events-none'}`}
-      >
+          initial={false}
+          animate={currentStep === 2 ? "open" : "collapsed"}
+          className={`bg-white rounded-xl shadow-sm border overflow-hidden ${
+            currentStep === 2 ? 'ring-1 ring-black/5' : 'opacity-40'
+          }`}
+        >
+
         <div className="p-6 border-b bg-gray-50/50">
           <h2 className="text-lg font-medium flex items-center gap-2">
             <span className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${currentStep === 2 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>2</span>
@@ -210,7 +224,7 @@ const CheckoutForm = ({
         </div>
 
         {currentStep === 2 && (
-          <div className="p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
 
             {/* Visual Payment Selection */}
             <div className="space-y-6">
@@ -264,7 +278,7 @@ const CheckoutForm = ({
 
             <div className="pt-4 border-t">
               <button
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isLoading}
                 className="w-full bg-black text-white py-4 rounded-xl font-medium hover:bg-zinc-800 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg shadow-lg shadow-black/10"
               >
@@ -278,7 +292,7 @@ const CheckoutForm = ({
                 )}
               </button>
             </div>
-          </div>
+          </form>
         )}
 
       </motion.div>

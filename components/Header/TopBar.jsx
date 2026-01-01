@@ -18,10 +18,10 @@ export default function TopBar() {
             </Link>
           </div>
           <div className="flex items-center">
-            <select className="text-sm bg-white border-none outline-none cursor-pointer">
+            {/* <select className="text-sm bg-white border-none outline-none cursor-pointer">
               <option>English</option>
               <option>Bahasa Indonesia</option>
-            </select>
+            </select> */}
           </div>
         </div>
       </div>
