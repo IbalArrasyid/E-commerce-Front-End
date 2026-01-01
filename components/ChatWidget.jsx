@@ -1,10 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+<<<<<<< Updated upstream
 import { useRouter } from 'next/navigation';
 import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag, FaRedo } from 'react-icons/fa';
 
 const STORAGE_KEY = 'homedecor_chat';
+=======
+import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaTag, FaRedo } from 'react-icons/fa';
+>>>>>>> Stashed changes
 
 const ChatWidget = () => {
   const router = useRouter();
@@ -46,7 +50,7 @@ const ChatWidget = () => {
       setMessages([
         {
           id: 'init-1',
-          text: "Halo! Saya asisten virtual Home Decor Indonesia. Ada yang bisa saya bantu?",
+          text: "Hello! I am Home Decor Indonesia's virtual assistant. How can I help you?",
           isAgent: true
         }
       ]);
@@ -142,7 +146,7 @@ const ChatWidget = () => {
       setIsStreaming(false);
       setMessages(prev => [...prev, {
         id: Date.now(),
-        text: "Maaf, server sedang sibuk. Mohon coba lagi nanti.",
+        text: "Sorry, the server is busy. Please try again later.",
         isAgent: true
       }]);
     }
@@ -158,6 +162,7 @@ const ChatWidget = () => {
   const handleResetChat = () => {
     setMessages([{
       id: 'init-1',
+<<<<<<< Updated upstream
       text: "Halo! Saya asisten virtual Home Decor Indonesia. Ada yang bisa saya bantu?",
       isAgent: true
     }]);
@@ -182,10 +187,22 @@ const ChatWidget = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
 
+=======
+      text: "Hello! I am Home Decor Indonesia's virtual assistant. How can I help you?",
+      isAgent: true
+    }]);
+    setThreadId(null);
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+
+      {/* Chat Window */}
+>>>>>>> Stashed changes
       <div className={`
         flex flex-col
-        fixed bottom-[90px] right-6 
-        w-[380px] h-[550px] 
+        fixed bottom-24 right-6 
+        w-[380px] h-[520px] 
         bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100
         transition-all duration-300 origin-bottom-right
         ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}
@@ -208,7 +225,11 @@ const ChatWidget = () => {
             {threadId && (
               <button
                 onClick={handleResetChat}
+<<<<<<< Updated upstream
                 title="Mulai percakapan baru"
+=======
+                title="Start new conversation"
+>>>>>>> Stashed changes
                 className="p-2 hover:bg-white/10 rounded-full transition-colors text-green-400"
               >
                 <FaRedo className="text-sm" />
@@ -260,7 +281,7 @@ const ChatWidget = () => {
           <input
             type="text"
             className="flex-1 px-4 py-2 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-gray-800 transition-all"
-            placeholder="Tulis pesan..."
+            placeholder="Type a message..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -283,7 +304,7 @@ const ChatWidget = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={`
           flex items-center justify-center
-          w-14 h-14 rounded-full shadow-2xl transition-all duration-300 ease-in-out
+          w-12 h-12 rounded-full shadow-2xl transition-all duration-300 ease-in-out
           ${isOpen ? 'bg-slate-800 rotate-90' : 'bg-green-600 hover:bg-green-700 hover:scale-110'}
         `}
       >
@@ -347,7 +368,7 @@ const ProductCarousel = ({ products, onProductClick }) => {
                   prev === 0 ? currentProduct.images.length - 1 : prev - 1
                 )
               }
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow z-10"
             >
               <FaChevronLeft />
             </button>
@@ -358,14 +379,14 @@ const ProductCarousel = ({ products, onProductClick }) => {
                   prev === currentProduct.images.length - 1 ? 0 : prev + 1
                 )
               }
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 p-2 rounded-full shadow z-10"
             >
               <FaChevronRight />
             </button>
           </>
         )}
 
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
           {currentProduct.images.map((_, idx) => (
             <div
               key={idx}
@@ -377,30 +398,45 @@ const ProductCarousel = ({ products, onProductClick }) => {
         </div>
 
 
-        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 z-10">
           <FaTag className="text-xs" />
           SALE
         </div>
-        {currentProduct.images && currentProduct.images.length > 0 ? (
-          <img
-            src={currentProduct.images[currentImageIndex]}
-            alt={currentProduct.item_name}
-            className="w-full h-full object-cover transition-all duration-300"
-            onError={(e) => {
-              e.currentTarget.src = "/placeholder.png"
-            }}
-          />
 
-        ) : (
-          <div className="text-6xl">🛋️</div>
-        )}
+        {/* Clickable image linking to product page */}
+        <a
+          href={`/product/${currentProduct.slug || currentProduct.item_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full h-full cursor-pointer"
+        >
+          {currentProduct.images && currentProduct.images.length > 0 ? (
+            <img
+              src={currentProduct.images[currentImageIndex]}
+              alt={currentProduct.item_name}
+              className="w-full h-full object-cover transition-all duration-300 hover:scale-105"
+              onError={(e) => {
+                e.currentTarget.src = "/placeholder.png"
+              }}
+            />
+
+          ) : (
+            <div className="text-6xl flex items-center justify-center w-full h-full">🛋️</div>
+          )}
+        </a>
       </div>
 
       <div className="p-4">
         <div className="flex items-start justify-between mb-2">
-          <h4 className="font-bold text-gray-800 text-sm line-clamp-2 flex-1">
+          {/* Clickable product name */}
+          <a
+            href={`/product/${currentProduct.slug || currentProduct.item_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-gray-800 text-sm line-clamp-2 flex-1 hover:text-green-600 hover:underline transition-colors cursor-pointer"
+          >
             {currentProduct.item_name || 'Product Name'}
-          </h4>
+          </a>
         </div>
 
         <p className="text-xs text-gray-600 mb-3 line-clamp-2">
