@@ -260,7 +260,7 @@ export default function FurniturePage() {
       content: (
         <div className="space-y-4">
           <p className="text-gray-600 leading-relaxed">
-            At Home Decor Indonesia, we're more than just a luxury furniture store; we're a destination for quality, beauty, and unparalleled customization. Our commitment to excellence is evident in every piece of furniture we offer. Here's why we stand out:
+            At Home Decor Indonesia, we&apos;re more than just a luxury furniture store; we&apos;re a destination for quality, beauty, and unparalleled customization. Our commitment to excellence is evident in every piece of furniture we offer. Here&apos;s why we stand out:
           </p>
 
           <div className="space-y-3">
@@ -620,7 +620,7 @@ export default function FurniturePage() {
                     Why Choose Us?
                 </h3>
                 <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
-                    At Home Decor Indonesia, we're more than just a luxury furniture store; we're a destination for quality, beauty, and unparalleled customization. Our commitment to excellence is evident in every piece of furniture we offer. Here's why we stand out:
+                    At Home Decor Indonesia, we&apos;re more than just a luxury furniture store; we&apos;re a destination for quality, beauty, and unparalleled customization. Our commitment to excellence is evident in every piece of furniture we offer. Here&apos;s why we stand out:
                 </p>
             </section>
 

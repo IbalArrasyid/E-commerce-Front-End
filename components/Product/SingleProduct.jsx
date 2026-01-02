@@ -373,7 +373,7 @@ export default function SingleProduct({ product, relatedProducts = [], isLoading
         <div className="text-center">
           <Package size={64} className="mx-auto text-gray-400 mb-4" />
           <h2 className="text-2xl font-light mb-2">Product Not Found</h2>
-          <p className="text-gray-600 mb-6">The product you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 mb-6">The product you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <a href="/products" className="inline-block px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
             Browse Products
           </a>
@@ -470,15 +470,15 @@ export default function SingleProduct({ product, relatedProducts = [], isLoading
 
     // Only mark as out of stock if we have clear evidence
     if (stockStatus === 'outofstock' ||
-        stockStatus === 'out of stock' ||
-        stockStatus === false) {
+      stockStatus === 'out of stock' ||
+      stockStatus === false) {
       isInStock = false;
       console.log('🔴 EXPLICIT OUT OF STOCK:', stockStatus);
     } else if (stockStatus === 'instock' ||
-               stockStatus === 'in stock' ||
-               stockStatus === true ||
-               stockStatus === '1' ||
-               stockStatus === 1) {
+      stockStatus === 'in stock' ||
+      stockStatus === true ||
+      stockStatus === '1' ||
+      stockStatus === 1) {
       isInStock = true;
       console.log('🟢 EXPLICIT IN STOCK:', stockStatus);
     } else {
@@ -609,7 +609,7 @@ export default function SingleProduct({ product, relatedProducts = [], isLoading
     };
   };
 
-const productData = formatProductData(product);
+  const productData = formatProductData(product);
 
   // Get category display name and path for breadcrumb
   const categoryDisplayName = getCategoryDisplayName(productData.name, productData.category);
@@ -789,11 +789,10 @@ const productData = formatProductData(product);
                   <button
                     key={image.id}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === index
+                    className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index
                         ? "border-black shadow-lg"
                         : "border-gray-200 hover:border-gray-400"
-                    }`}
+                      }`}
                   >
                     <Image
                       src={image.src}
@@ -915,11 +914,10 @@ const productData = formatProductData(product);
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`p-3 rounded-lg text-sm font-medium ${
-                    addToCartMessage.includes('Failed') || addToCartMessage.includes('out of stock')
+                  className={`p-3 rounded-lg text-sm font-medium ${addToCartMessage.includes('Failed') || addToCartMessage.includes('out of stock')
                       ? 'bg-red-100 text-red-700 border border-red-200'
                       : 'bg-green-100 text-green-700 border border-green-200'
-                  }`}
+                    }`}
                 >
                   {addToCartMessage}
                 </motion.div>
@@ -936,9 +934,8 @@ const productData = formatProductData(product);
                 </button>
                 <button
                   onClick={handleWishlist}
-                  className={`p-3 border rounded-lg hover:bg-gray-50 transition-colors ${
-                    isWishlisted ? "bg-red-50 border-red-200 text-red-500" : "border-gray-300"
-                  }`}
+                  className={`p-3 border rounded-lg hover:bg-gray-50 transition-colors ${isWishlisted ? "bg-red-50 border-red-200 text-red-500" : "border-gray-300"
+                    }`}
                 >
                   <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
                 </button>
@@ -1013,11 +1010,10 @@ const productData = formatProductData(product);
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === tab
+                className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab
                     ? "border-black text-black"
                     : "border-transparent text-gray-600 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>

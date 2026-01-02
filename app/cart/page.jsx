@@ -67,7 +67,7 @@ export default function CartPage() {
         <div className="text-center max-w-md mx-auto p-8">
           <ShoppingBag className="mx-auto text-gray-400 mb-4" size={64} />
           <h2 className="text-2xl font-light mb-2">Your cart is empty</h2>
-          <p className="text-gray-600 mb-6">Looks like you haven't added any products yet</p>
+          <p className="text-gray-600 mb-6">Looks like you haven&apos;t added any products yet</p>
 
           {/* Debug Information */}
           <div className="bg-gray-100 p-4 rounded-lg mb-6 text-left">

@@ -75,9 +75,9 @@ export default function WooCommerceSetupGuide({ onClose, onConfigured }) {
                 <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside ml-4">
                   <li>Login to your WordPress admin dashboard</li>
                   <li>Navigate to <strong>WooCommerce → Settings → Advanced → API</strong></li>
-                  <li>Click <strong>"Add Key"</strong> to create a new API key</li>
-                  <li>Give it a descriptive name (e.g., "Frontend Checkout")</li>
-                  <li>Select <strong>"Read/Write"</strong> permissions</li>
+                  <li>Click <strong>&quot;Add Key&quot;</strong> to create a new API key</li>
+                  <li>Give it a descriptive name (e.g., &quot;Frontend Checkout&quot;)</li>
+                  <li>Select <strong>&quot;Read/Write&quot;</strong> permissions</li>
                   <li>Save the Consumer Key and Consumer Secret</li>
                 </ol>
               </div>

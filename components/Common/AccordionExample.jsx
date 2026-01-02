@@ -56,7 +56,7 @@ const AccordionExample = () => {
       icon: <Star className="w-6 h-6 text-green-600" />,
       content: (
         <div className="space-y-3">
-          <p>Each piece in our collection isn't just aesthetically pleasing—it's built to endure, ensuring that your investment is both stylish and long-lasting.</p>
+          <p>Each piece in our collection isn&apos;t just aesthetically pleasing—it&apos;s built to endure, ensuring that your investment is both stylish and long-lasting.</p>
           <div className="bg-green-50 p-4 rounded-lg">
             <p className="text-sm text-green-800 font-medium">Premium materials sourced from trusted suppliers</p>
           </div>
@@ -69,7 +69,7 @@ const AccordionExample = () => {
       icon: <Users className="w-6 h-6 text-green-600" />,
       content: (
         <div className="space-y-3">
-          <p>Our experienced staff are more than salespeople—they're advisors who will work with you to create the ideal furniture that fits seamlessly into your space.</p>
+          <p>Our experienced staff are more than salespeople—they&apos;re advisors who will work with you to create the ideal furniture that fits seamlessly into your space.</p>
           <div className="bg-blue-50 p-4 rounded-lg">
             <p className="text-sm text-blue-800 font-medium">15+ years of industry experience</p>
           </div>
@@ -186,8 +186,7 @@ const AccordionExample = () => {
           ]}
           className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl"
           itemClassName="bg-white/80 backdrop-blur-sm border border-green-200"
-          titleClassName="px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 rounded-lg"
-          titleClassName="font-bold text-white"
+          titleClassName="px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 rounded-lg font-bold"
           contentClassName="px-6 py-4 bg-white/60"
         />
       </section>
