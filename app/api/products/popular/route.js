@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
@@ -6,7 +8,7 @@ import { createWooClientRead } from "@/lib/woocommerce";
 export async function GET(request) {
   try {
     console.log('=== Popular Products API Called ===');
-    
+
     // Initialize WooCommerce client
     const api = createWooClientRead();
     console.log('✅ WooCommerce client created');
@@ -25,7 +27,7 @@ export async function GET(request) {
     // Handle category/categories parameter
     const categories = searchParams.get('categories');
     const category = searchParams.get('category');
-    
+
     if (categories) {
       // Multiple categories (comma-separated)
       console.log('🏷️  Categories param:', categories);
@@ -40,7 +42,7 @@ export async function GET(request) {
     const minPrice = searchParams.get('min_price');
     const maxPrice = searchParams.get('max_price');
     const search = searchParams.get('search');
-    
+
     if (minPrice) params.min_price = minPrice;
     if (maxPrice) params.max_price = maxPrice;
     if (search) params.search = search;
@@ -49,18 +51,18 @@ export async function GET(request) {
 
     // Fetch products from WooCommerce
     const response = await api.get('products', params);
-    
+
     console.log('✅ Products fetched:', response.data?.length || 0, 'items');
 
     // Validate response
     if (!response || !response.data) {
       console.error('❌ Invalid response structure');
       return NextResponse.json(
-        { 
+        {
           success: false,
           error: 'Invalid response from WooCommerce API',
           params: params
-        }, 
+        },
         { status: 500 }
       );
     }
@@ -78,14 +80,14 @@ export async function GET(request) {
     console.error('   Message:', error.message);
     console.error('   Status:', error.response?.status);
     console.error('   Response:', error.response?.data);
-    
+
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: error.message || 'Failed to fetch products',
         details: error.response?.data || null,
         statusCode: error.response?.status || 500
-      }, 
+      },
       { status: error.response?.status || 500 }
     );
   }
