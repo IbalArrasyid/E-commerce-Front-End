@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 
 const WP_USERNAME = 'iqbal';
@@ -6,7 +8,7 @@ const WP_PASSWORD = 'XzCK 4g0H EOLq UsdQ 7PK8 4CmA';
 export async function GET() {
   try {
     const auth = Buffer.from(`${WP_USERNAME}:${WP_PASSWORD}`).toString('base64');
-    
+
     const res = await fetch('https://homedecorindonesia.com/wp-json/menus/v1/menus/main-menu', {
       headers: {
         'Authorization': `Basic ${auth}`,

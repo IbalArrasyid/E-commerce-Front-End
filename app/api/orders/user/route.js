@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from "next/server";
 import { createWooClientRead } from "@/lib/woocommerce";
 import { getUserFromRequest } from "@/lib/auth";
@@ -22,10 +24,10 @@ export async function GET(request) {
     });
 
     const ordersWithInvoice = orders.map(order => {
-    const invoiceMeta = order.meta_data.find(md => md.key === "doku_invoice");
-    const paymentUrlMeta = order.meta_data.find(md => md.key === "doku_payment_url");
+      const invoiceMeta = order.meta_data.find(md => md.key === "doku_invoice");
+      const paymentUrlMeta = order.meta_data.find(md => md.key === "doku_payment_url");
 
-    return {
+      return {
         id: order.id,
         number: order.number,
         total: order.total,
@@ -33,9 +35,9 @@ export async function GET(request) {
         payment_method: order.payment_method_title,
         line_items: order.line_items,
         invoice: invoiceMeta?.value || order.number,
-        payment_url: paymentUrlMeta?.value || null, 
+        payment_url: paymentUrlMeta?.value || null,
         date_created: order.date_created
-    };
+      };
     });
 
 

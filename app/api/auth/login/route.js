@@ -1,12 +1,14 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
     // Take input from request body
     const body = await request.json();
-    
+
     // Make API compatible if frontend sends { email: '...' } or { username: '...' }
-    const loginInput = body.username || body.email; 
+    const loginInput = body.username || body.email;
     const password = body.password;
 
     // Input validation
@@ -41,8 +43,8 @@ export async function POST(request) {
     // Handle Error from WordPress
     if (!wpResponse.ok) {
       // Clean error message from HTML tags if any
-      const errorMessage = data.message ? 
-        data.message.replace(/(<([^>]+)>)/gi, "") : 
+      const errorMessage = data.message ?
+        data.message.replace(/(<([^>]+)>)/gi, "") :
         'Invalid username/email or password';
 
       return NextResponse.json(
@@ -62,7 +64,7 @@ export async function POST(request) {
     // Success Response 
     const response = NextResponse.json({
       success: true,
-      email: userData.email, 
+      email: userData.email,
       token: data.token,
       message: 'Login successful'
     });

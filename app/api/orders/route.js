@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
@@ -79,7 +80,7 @@ export async function POST(request) {
                 { key: "doku_invoice", value: paymentResponse.invoice_number },
                 { key: "payment_status", value: "waiting_for_payment" },
                 { key: "doku_payment_url", value: paymentResponse.payment_url }
-        ]
+            ]
         });
 
 

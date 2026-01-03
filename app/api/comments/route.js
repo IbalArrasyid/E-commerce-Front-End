@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
@@ -9,26 +11,26 @@ export async function POST(request) {
     const token = request.cookies.get('homedecor_session')?.value;
 
     const body = token
-    ? { post: postId, content }
-    : {
+      ? { post: postId, content }
+      : {
         post: postId,
         content,
         author_name: author,
         author_email: email,
-        };
+      };
 
 
     // Forward request ke WordPress REST API
     const wpRes = await fetch(
-    `${process.env.NEXT_PUBLIC_WC_STORE_URL}/wp-json/wp/v2/comments`,
-    {
+      `${process.env.NEXT_PUBLIC_WC_STORE_URL}/wp-json/wp/v2/comments`,
+      {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify(body),
-    }
+      }
     );
 
 

@@ -1,13 +1,15 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    
+
     // Take data from request body
     // Frontend sends: { email, password }
     const { email, password } = body;
-    
+
     // (Backend Validation)
     if (!email || !password) {
       return NextResponse.json(
@@ -20,9 +22,9 @@ export async function POST(request) {
     // If firstName is missing, split from email
     let firstName = body.firstName;
     if (!firstName) {
-        firstName = email.split('@')[0];
+      firstName = email.split('@')[0];
     }
-    
+
     const lastName = body.lastName || '';
     const phone = body.phone || '';
 
@@ -50,14 +52,14 @@ export async function POST(request) {
         first_name: firstName,
         last_name: lastName,
         billing: {
-            first_name: firstName,
-            last_name: lastName,
-            email: email,
-            phone: phone
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          phone: phone
         },
         shipping: {
-            first_name: firstName,
-            last_name: lastName
+          first_name: firstName,
+          last_name: lastName
         }
       }),
     });
@@ -67,7 +69,7 @@ export async function POST(request) {
     // Handle Error from WooCommerce
     if (!wcResponse.ok) {
       console.error('WooCommerce Register Error:', wcData);
-      
+
       // Handle email if already exists
       if (wcData.code === 'registration-error-email-exists') {
         return NextResponse.json(
@@ -75,7 +77,7 @@ export async function POST(request) {
           { status: 409 }
         );
       }
-      
+
       return NextResponse.json(
         { error: wcData.message || 'Registration failed. Please try again.' },
         { status: wcResponse.status }
@@ -85,21 +87,21 @@ export async function POST(request) {
     // AUTO-LOGIN: Get JWT Token immediately after registration (so user doesn't need to login again)
     let token = null;
     try {
-        const jwtResponse = await fetch(`${wpUrl}/wp-json/jwt-auth/v1/token`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-              username: email, // Plugin JWT support login pakai email
-              password: password 
-          }),
-        });
+      const jwtResponse = await fetch(`${wpUrl}/wp-json/jwt-auth/v1/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: email, // Plugin JWT support login pakai email
+          password: password
+        }),
+      });
 
-        const jwtData = await jwtResponse.json();
-        if (jwtResponse.ok) {
-            token = jwtData.token;
-        }
+      const jwtData = await jwtResponse.json();
+      if (jwtResponse.ok) {
+        token = jwtData.token;
+      }
     } catch (jwtError) {
-        console.warn('Auto-login failed, but registration success:', jwtError);
+      console.warn('Auto-login failed, but registration success:', jwtError);
     }
 
     // Success Response to Frontend
@@ -117,13 +119,13 @@ export async function POST(request) {
 
     // Opsional: Set Cookie HTTPOnly to enhance security
     if (token) {
-        response.cookies.set('homedecor_session', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 7, // 1 Week
-            path: '/',
-        });
+      response.cookies.set('homedecor_session', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24 * 7, // 1 Week
+        path: '/',
+      });
     }
 
     return response;
