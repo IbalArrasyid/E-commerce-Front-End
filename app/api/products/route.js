@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
@@ -20,20 +22,20 @@ export async function GET(request) {
 		if (category) params.category = String(category);
 		if (search) params.search = String(search);
 
-		
+
 		// Ambil data produk dari WooCommerce
 		const { data, headers } = await api.get("products", { params });
 
 		// Filter manual di server-side
 		let filtered = data;
 		if (search?.trim()) {
-		const keyword = search.trim().toLowerCase();
-		filtered = data.filter((p) =>
-			p.name.toLowerCase().includes(keyword) ||
-			p.slug.toLowerCase().includes(keyword) ||
-			p.description.toLowerCase().includes(keyword) ||
-			p.short_description.toLowerCase().includes(keyword)
-		);
+			const keyword = search.trim().toLowerCase();
+			filtered = data.filter((p) =>
+				p.name.toLowerCase().includes(keyword) ||
+				p.slug.toLowerCase().includes(keyword) ||
+				p.description.toLowerCase().includes(keyword) ||
+				p.short_description.toLowerCase().includes(keyword)
+			);
 		}
 
 		return NextResponse.json({

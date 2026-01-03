@@ -1,6 +1,9 @@
 // app/api/categories/route.js
 // API endpoint untuk mendapatkan semua kategori dan ID-nya
 
+export const dynamic = 'force-dynamic';
+
+
 export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
@@ -9,12 +12,12 @@ import { createWooClientRead } from "@/lib/woocommerce";
 export async function GET(request) {
   try {
     console.log('=== Get Categories API Called ===');
-    
+
     const api = createWooClientRead();
     const { searchParams } = new URL(request.url);
 
     const params = {
-      per_page: 100, 
+      per_page: 100,
       orderby: 'name',
       order: 'asc'
     };
@@ -54,13 +57,13 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Error fetching categories:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: error.message,
         details: error.response?.data || null
-      }, 
+      },
       { status: error.response?.status || 500 }
     );
   }

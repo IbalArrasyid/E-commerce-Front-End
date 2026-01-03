@@ -1,5 +1,7 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
-import { createWooClientRead, createWooClientWrite} from '@/lib/woocommerce';
+import { createWooClientRead, createWooClientWrite } from '@/lib/woocommerce';
 import { checkDokuPaymentStatus } from '@/lib/doku';
 
 export const runtime = 'nodejs';
@@ -48,35 +50,34 @@ export async function POST(request) {
         const paymentStatus = paymentStatusMap[order.status] || 'PENDING';
 
         if (order.status === 'pending') {
-        const invoice = Array.isArray(order.meta_data)
-            ? order.meta_data.find(m => m.key === 'doku_invoice')?.value
-            : null;
+            const invoice = Array.isArray(order.meta_data)
+                ? order.meta_data.find(m => m.key === 'doku_invoice')?.value
+                : null;
 
-        if (invoice) {
-           let dokuStatus = null;
-            try {
-                dokuStatus = await checkDokuPaymentStatus(invoice);
-            } catch (err) {
-                console.warn('⚠️ DOKU status check failed:', err.message);
-                dokuStatus = 'PENDING'; // fallback supaya tidak crash
+            if (invoice) {
+                let dokuStatus = null;
+                try {
+                    dokuStatus = await checkDokuPaymentStatus(invoice);
+                } catch (err) {
+                    console.warn('⚠️ DOKU status check failed:', err.message);
+                    dokuStatus = 'PENDING'; // fallback supaya tidak crash
+                }
+
+                try {
+                    await createWooClientWrite().put(`orders/${order.id}`, { status: 'processing' });
+                    console.log('✅ WooCommerce updated');
+                } catch (e) { console.error('❌ Failed to update WooCommerce', e.response?.data || e.message); }
+
+                if (dokuStatus === 'EXPIRED') {
+                    await api.put(`orders/${order.id}`, { status: 'cancelled' });
+                }
+
+                if (dokuStatus === 'SUCCESS') {
+                    await api.put(`orders/${order.id}`, { status: 'processing' });
+                }
+
             }
-
-            try { 
-                await createWooClientWrite().put(`orders/${order.id}`, { status: 'processing' }); 
-                console.log('✅ WooCommerce updated'); 
-            } catch(e) 
-                { console.error('❌ Failed to update WooCommerce', e.response?.data || e.message); }
-
-            if (dokuStatus === 'EXPIRED') {
-                await api.put(`orders/${order.id}`, { status: 'cancelled' });
-            }
-
-            if (dokuStatus === 'SUCCESS') {
-                await api.put(`orders/${order.id}`, { status: 'processing' });
-            }
-
         }
-    }
 
 
         return NextResponse.json({
