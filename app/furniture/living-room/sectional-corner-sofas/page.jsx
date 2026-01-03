@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 export default async function SideTablePage() {
-  const { products, categoryId } = await getProducts('sectional-corner-sofa', ['sectional-corner-sofa'], 100);
+  const { products, categoryId } = await getProducts('sectional-corner-sofas', ['sectional-corner-sofas'], 100);
 
   return <ProductsPage categoryId={categoryId} products={products} category="Sectional Corner Sofa" />
 }
