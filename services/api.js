@@ -9,9 +9,32 @@ const secret = process.env.WC_READ_SECRET;
 const BASE_URL = `${base}/wp-json/wc/v3`;
 
 /**
+ * Build phase detection
+ * During `next build`, we return empty data to prevent external API calls
+ */
+const IS_BUILD_PHASE = process.env.NEXT_PHASE === 'phase-production-build';
+
+/**
+ * Custom User-Agent to identify requests and avoid Cloudflare bot challenges
+ */
+const USER_AGENT = 'HomeDecorIndonesia/1.0 (Next.js Server; +https://homedecorindonesia.com)';
+
+/**
  * Maximum products per page to prevent excessive API requests
  */
 const MAX_PER_PAGE = 24;
+
+/**
+ * Guard function to block external fetch during build
+ * Returns true if we should skip the fetch (during build phase)
+ */
+function guardBuildPhase(operation) {
+  if (IS_BUILD_PHASE) {
+    console.warn(`[BUILD PHASE] Skipping external API call: ${operation}`);
+    return true;
+  }
+  return false;
+}
 
 /**
  * In-memory cache for categories
@@ -30,13 +53,23 @@ export function resetCategoriesCache() {
 
 /**
  * Fetch JSON from WooCommerce API with Basic Auth
+ * - Uses Authorization header (not query string) to hide credentials from logs
+ * - Includes custom User-Agent to avoid Cloudflare challenges
+ * - Blocked during build phase (returns empty array)
  */
 export async function fetchJson(path) {
+  // Guard: Skip during build phase
+  if (guardBuildPhase(`fetchJson: ${path}`)) {
+    return [];
+  }
+
   const auth = Buffer.from(`${key}:${secret}`).toString('base64');
 
   const res = await fetch(`${BASE_URL}${path}&stock_status=instock&status=publish`, {
     headers: {
-      Authorization: `Basic ${auth}`,
+      'Authorization': `Basic ${auth}`,
+      'User-Agent': USER_AGENT,
+      'Content-Type': 'application/json',
     },
     cache: 'no-store',
   });
