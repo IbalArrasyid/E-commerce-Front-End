@@ -7,6 +7,11 @@ const secret = process.env.WC_READ_SECRET;
 const BASE_URL = `${base}/wp-json/wc/v3`;
 
 /**
+ * Maximum products per page to prevent excessive API requests
+ */
+const MAX_PER_PAGE = 24;
+
+/**
  * In-memory cache for categories
  * Uses Promise singleton pattern to ensure only 1 fetch per request lifecycle
  */
@@ -106,11 +111,16 @@ export async function getCategoryId(categorySlug, categoryName) {
 /**
  * Get products by category
  * Optimized: Only 2 API calls total (1 for categories, 1 for products)
+ * 
+ * @param {string} categorySlug - Category slug
+ * @param {string[]} categoryName - Category name alternatives
+ * @param {number} numberPerPage - Products per page (max 24)
  */
 export async function getProducts(categorySlug, categoryName, numberPerPage) {
   try {
     const categoryId = await getCategoryId(categorySlug, categoryName);
 
+    // Validation: Don't request products without a valid category
     if (!categoryId) {
       console.warn(`Category not found: ${categorySlug}`);
       return {
@@ -119,7 +129,10 @@ export async function getProducts(categorySlug, categoryName, numberPerPage) {
       };
     }
 
-    const data = await fetchJson(`/products?category=${categoryId}&per_page=${numberPerPage}`);
+    // Limit per_page to MAX_PER_PAGE to prevent excessive fetching
+    const perPage = Math.min(numberPerPage || MAX_PER_PAGE, MAX_PER_PAGE);
+
+    const data = await fetchJson(`/products?category=${categoryId}&per_page=${perPage}`);
 
     return {
       categoryId,
