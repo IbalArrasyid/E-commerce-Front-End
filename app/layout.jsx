@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Theme from "@/theme-provider";
 import "./globals.css";
 import localFont from 'next/font/local';
