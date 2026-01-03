@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 const base = process.env.NEXT_PUBLIC_WC_STORE_URL;
 const key = process.env.WC_READ_KEY;
 const secret = process.env.WC_READ_SECRET;
@@ -11,7 +13,7 @@ export async function fetchJson(path) {
     headers: {
       Authorization: `Basic ${auth}`,
     },
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {

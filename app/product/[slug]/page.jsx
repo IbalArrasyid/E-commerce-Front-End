@@ -2,6 +2,8 @@ import SingleProduct from "@/components/Product/SingleProduct";
 import { getProductBySlug, getRelatedProducts } from "@/lib/woocommerce";
 import { notFound } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProductPage({ params }) {
   const { slug } = params;
 

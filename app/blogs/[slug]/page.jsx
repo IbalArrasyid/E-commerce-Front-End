@@ -5,6 +5,8 @@ import ShareButtons from './ShareButtons';
 import CommentForm from "@/components/CommentForm";
 import { cookies } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPostPage({ params }) {
   const { slug } = params;
   const cookieStore = cookies();
@@ -32,7 +34,7 @@ export default async function BlogPostPage({ params }) {
   const commentsRes = await fetch(
     `${process.env.NEXT_PUBLIC_WC_STORE_URL}/wp-json/wp/v2/comments?post=${post.id}&per_page=100`,
     {
-      cache: 'no-store', 
+      cache: 'no-store',
     }
   );
 

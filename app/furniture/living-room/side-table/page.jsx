@@ -2,6 +2,8 @@
 import ProductsPage from "@/components/ProductsPage";
 import { getProducts } from "@/services/api";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Side Table',
 };
