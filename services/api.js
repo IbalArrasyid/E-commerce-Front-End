@@ -1,3 +1,5 @@
+import 'server-only';
+
 export const dynamic = 'force-dynamic';
 
 const base = process.env.NEXT_PUBLIC_WC_STORE_URL;

@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AlertCircle, Key, Globe, ExternalLink, Check, X } from "lucide-react";
-import { isWooCommerceConfigured, getWooCommerceSetupInstructions } from "@/lib/woocommerce";
+import { getWooCommerceSetupInstructions, checkWooCommerceConfigured } from "@/lib/woocommerce-client";
 
 export default function WooCommerceSetupGuide({ onClose, onConfigured }) {
   const [copiedIndex, setCopiedIndex] = useState(null);
-  const isConfigured = isWooCommerceConfigured();
+  const [isConfigured, setIsConfigured] = useState(null);
   const instructions = getWooCommerceSetupInstructions();
+
+  // Check configuration on mount using server API (safe)
+  useEffect(() => {
+    checkWooCommerceConfigured().then(setIsConfigured);
+  }, []);
 
   const copyToClipboard = (text, index) => {
     navigator.clipboard.writeText(text);
@@ -20,6 +25,10 @@ export default function WooCommerceSetupGuide({ onClose, onConfigured }) {
       window.open('/api/test-woo', '_blank');
     }
   };
+
+  if (isConfigured === null) {
+    return null; // Loading state
+  }
 
   if (isConfigured) {
     return null; // Don't show if already configured
