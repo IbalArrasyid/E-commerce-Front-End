@@ -4,8 +4,8 @@ import { generateCategoryMetadata } from "@/lib/categoryMetadata";
 
 export const dynamic = 'force-dynamic';
 
-const CATEGORY_SLUG = 'sofa';
-const CATEGORY_NAME = 'Sofa';
+const CATEGORY_SLUG = 'sofas';
+const CATEGORY_NAME = 'Sofas';
 
 export async function generateMetadata() {
   return generateCategoryMetadata(CATEGORY_SLUG, CATEGORY_NAME);
