@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function SideTablePage() {
   const { products, categoryId } =
-    await getProductsByCategoryId(183, 100);
+    await getProductsByCategoryId(183, 24);
 
   return (
     <ProductsPage
