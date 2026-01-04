@@ -51,6 +51,18 @@ export function resetCategoriesCache() {
   categoriesCachePromise = null;
 }
 
+export async function getProductsByCategoryId(categoryId, perPage = 24) {
+  const data = await fetchJson(
+    `/products?category=${categoryId}&per_page=${perPage}&status=publish&stock_status=instock`
+  );
+
+  return {
+    categoryId,
+    products: Array.isArray(data) ? data : [],
+  };
+}
+
+
 /**
  * Fetch JSON from WooCommerce API with Basic Auth
  * - Uses Authorization header (not query string) to hide credentials from logs

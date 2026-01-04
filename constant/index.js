@@ -62,8 +62,8 @@ export const navlinks = [
             href: '/furniture/living-room/tv-stands'
           },
           {
-            name: 'Room Deviders',
-            href: '/furniture/living-room/room-deviders'
+            name: 'Room Dividers',
+            href: '/furniture/living-room/room-dividers'
           }
         ]
       },

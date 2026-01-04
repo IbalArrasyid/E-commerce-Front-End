@@ -1,18 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
-import { generateCategoryMetadata } from "@/lib/categoryMetadata";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-const CATEGORY_SLUG = 'sofas';
-const CATEGORY_NAME = 'Sofas';
-
-export async function generateMetadata() {
-  return generateCategoryMetadata(CATEGORY_SLUG, CATEGORY_NAME);
-}
-
 export default async function SofasPage() {
-  const { products, categoryId } = await getProducts(CATEGORY_SLUG, [CATEGORY_SLUG], 24);
+  const { products, categoryId } =
+    await getProductsByCategoryId(94, 100);
 
-  return <ProductsPage categoryId={categoryId} products={products} category={CATEGORY_NAME} />
+  return (
+    <ProductsPage
+      categoryId={categoryId}
+      products={products}
+      category="Sofa"
+    />
+  );
 }

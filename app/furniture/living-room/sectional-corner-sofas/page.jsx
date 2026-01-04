@@ -1,15 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Sectional Corner Sofa',
-};
+export default async function SectionalCornerSofasPage() {
+  const { products, categoryId } =
+    await getProductsByCategoryId(222, 100);
 
-export default async function SideTablePage() {
-  const { products, categoryId } = await getProducts('sectional-corner-sofas', ['sectional-corner-sofas'], 100);
-
-  return <ProductsPage categoryId={categoryId} products={products} category="Sectional Corner Sofa" />
+  return (
+    <ProductsPage
+      categoryId={categoryId}
+      products={products}
+      category="Sectional Corner Sofa"
+    />
+  );
 }
-
