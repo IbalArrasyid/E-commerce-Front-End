@@ -74,10 +74,10 @@ const ChatWidget = () => {
 
     try {
       // Use existing threadId for continuation, or create new thread
-      	const baseURL = process.env.NEXT_PUBLIC_AI_AGENT_URL;
-	const url = threadId
+      const baseURL = process.env.NEXT_PUBLIC_AI_AGENT_URL;
+      const url = threadId
         ? `${baseURL}/chat/${threadId}`
-        : '${baseURL}/chat';
+        : `${baseURL}/chat`;
 
       const response = await fetch(url, {
         method: 'POST',
