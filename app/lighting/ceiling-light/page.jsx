@@ -1,15 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Ceiling Lights',
-};
-
 export default async function CeilingLightPage() {
-  const { products, categoryId } = await getProducts('ceiling-lights', ['ceiling-lights'], 100);
+  const { products, categoryId } =
+    await getProductsByCategoryId(113, 24);
 
-  return <ProductsPage categoryId={categoryId} products={products} category="Ceiling Lights" />
+  return (
+    <ProductsPage
+      categoryId={categoryId}
+      products={products}
+      category="Ceiling Light"
+    />
+  );
 }
-

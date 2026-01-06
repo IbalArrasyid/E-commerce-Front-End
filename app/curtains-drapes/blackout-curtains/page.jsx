@@ -1,15 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-    title: 'Blackout Curtains',
-};
-
 export default async function BlackoutCurtainsPage() {
-    const { products, categoryId } = await getProducts('blackout-curtains', ['blackout-curtains'], 100);
+    const { products, categoryId } =
+        await getProductsByCategoryId(5957, 24);
 
-    return <ProductsPage categoryId={categoryId} products={products} category="Blackout Curtains" />
+    return (
+        <ProductsPage
+            categoryId={categoryId}
+            products={products}
+            category="Blackout Curtains"
+        />
+    );
 }
-

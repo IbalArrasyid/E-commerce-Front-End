@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ShoppingCart, X, Plus } from "lucide-react";
 
@@ -56,9 +57,11 @@ export default function AddToCartNotification({
           {/* Product Details */}
           <div className="flex gap-3 mb-4 pb-4 border-b border-gray-100">
             <div className="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-              <img
+              <Image
                 src={product.images?.[0]?.src || '/placeholder-product.jpg'}
                 alt={product.name}
+                width={64}
+                height={64}
                 className="w-full h-full object-cover"
               />
             </div>

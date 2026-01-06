@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShoppingCart,
@@ -122,9 +123,11 @@ export default function ShoppingCartDropdown({ items, isOpen, onClose, onUpdateQ
                     <div className="flex gap-4">
                       {/* Product Image */}
                       <div className="relative w-20 h-20 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                        <img
+                        <Image
                           src={item.images?.[0]?.src || '/placeholder-product.jpg'}
                           alt={item.name}
+                          width={80}
+                          height={80}
                           className="w-full h-full object-cover"
                         />
                       </div>

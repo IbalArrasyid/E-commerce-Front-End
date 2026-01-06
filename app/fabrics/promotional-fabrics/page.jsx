@@ -1,15 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Promotional Fabrics',
-};
-
 export default async function PromotionalFabricsPage() {
-  const { products, categoryId } = await getProducts('promotionalfabrics', ['promotionalfabrics'], 100);
+  const { products, categoryId } =
+    await getProductsByCategoryId(146, 24);
 
-  return <ProductsPage categoryId={categoryId} products={products} category="Promotional Fabrics" />
+  return (
+    <ProductsPage
+      categoryId={categoryId}
+      products={products}
+      category="Promotional Fabrics"
+    />
+  );
 }
-

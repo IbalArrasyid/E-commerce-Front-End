@@ -3,18 +3,19 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  FileText, 
-  MapPin, 
-  User, 
+import {
+  LayoutDashboard,
+  ShoppingBag,
+  FileText,
+  MapPin,
+  User,
   LogOut,
   Search,
   Package,
   CreditCard,
-  ArrowRightLeft 
+  ArrowRightLeft
 } from 'lucide-react';
 
 export default function MyAccountPage() {
@@ -40,36 +41,36 @@ export default function MyAccountPage() {
 
 
   const fetchOrders = async () => {
-  try {
-    setLoadingOrders(true);
+    try {
+      setLoadingOrders(true);
 
-    const token = localStorage.getItem("homedecor_token");
-    if (!token) {
-      console.error("NO TOKEN IN LOCALSTORAGE");
-      return;
+      const token = localStorage.getItem("homedecor_token");
+      if (!token) {
+        console.error("NO TOKEN IN LOCALSTORAGE");
+        return;
+      }
+
+      const res = await fetch("/api/orders/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        throw new Error("Unauthorized");
+      }
+
+      const data = await res.json();
+      setOrders(data.orders || []);
+      setSelectedOrder(data.orders?.[0] || null);
+
+    } catch (err) {
+      console.error("Fetch orders failed:", err);
+    } finally {
+      setLoadingOrders(false);
     }
-
-    const res = await fetch("/api/orders/user", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error("Unauthorized");
-    }
-
-    const data = await res.json();
-    setOrders(data.orders || []);
-    setSelectedOrder(data.orders?.[0] || null);
-
-  } catch (err) {
-    console.error("Fetch orders failed:", err);
-  } finally {
-    setLoadingOrders(false);
-  }
-};
+  };
 
 
   // State untuk Tab Navigasi Dashboard
@@ -137,7 +138,7 @@ export default function MyAccountPage() {
       default: return status;
     }
   };
-  
+
   useEffect(() => {
     if (activeTab === 'orders') {
       fetchOrders();
@@ -156,8 +157,8 @@ export default function MyAccountPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [message, setMessage] = useState({
-  type: '', // 'success' | 'error'
-  text: ''
+    type: '', // 'success' | 'error'
+    text: ''
   });
 
 
@@ -206,7 +207,7 @@ export default function MyAccountPage() {
 
   const handleLogout = () => {
     if (logout) logout();
-    window.location.href = '/my-account'; 
+    window.location.href = '/my-account';
   };
 
   const handleUpdateProfile = async (e) => {
@@ -231,17 +232,17 @@ export default function MyAccountPage() {
       const data = await response.json();
 
       if (response.ok) {
-      await refreshUser();
-      setMessage({
-        type: 'success',
-        text: 'Account details updated successfully.'
-      });
-    } else {
-      setMessage({
-        type: 'error',
-        text: data.error || 'Failed to update profile.'
-      });
-    }
+        await refreshUser();
+        setMessage({
+          type: 'success',
+          text: 'Account details updated successfully.'
+        });
+      } else {
+        setMessage({
+          type: 'error',
+          text: data.error || 'Failed to update profile.'
+        });
+      }
 
     } catch (err) {
       setError('Network error occurred.');
@@ -268,7 +269,7 @@ export default function MyAccountPage() {
           <h1 className="text-3xl font-normal text-black mb-10">My account</h1>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            
+
             {/* SIDEBAR NAVIGATION */}
             <nav className="w-full lg:w-1/4 border-r border-gray-100 pr-0 lg:pr-8">
               <ul className="space-y-1">
@@ -347,7 +348,7 @@ export default function MyAccountPage() {
 
             {/* MAIN CONTENT AREA */}
             <main className="w-full lg:w-3/4 pl-0 lg:pl-8">
-              
+
               {/* DASHBOARD CONTENT */}
               {activeTab === 'dashboard' && (
                 <div className="space-y-4">
@@ -362,215 +363,217 @@ export default function MyAccountPage() {
 
               {/* ORDERS CONTENT (Placeholder) */}
               {activeTab === 'orders' && (
-              <div>
-                <h2 className="text-2xl font-light mb-4">My Orders</h2>
+                <div>
+                  <h2 className="text-2xl font-light mb-4">My Orders</h2>
 
-                {/* Filters */}
-                <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="text"
-                      placeholder="Search by order number..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-                    />
+                  {/* Filters */}
+                  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1 relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                      <input
+                        type="text"
+                        placeholder="Search by order number..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div className="sm:w-48">
+                      <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      >
+                        <option value="all">All Status</option>
+                        <option value="pending">Waiting for Payment</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className="sm:w-48">
-                    <select
-                      value={statusFilter}
-                      onChange={(e) => setStatusFilter(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-                    >
-                      <option value="all">All Status</option>
-                      <option value="pending">Waiting for Payment</option>
-                      <option value="processing">Processing</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  </div>
-                </div>
 
-                {/* Orders List */}
-                {loadingOrders ? (
-                  <div className="flex justify-center py-12">
-                    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
-                  </div>
-                ) : filteredOrders.length === 0 ? (
-                  <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-                    <Package className="mx-auto text-gray-400 mb-4" size={64} />
-                    <h3 className="text-xl font-medium text-gray-900 mb-2">No orders found</h3>
-                    <p className="text-gray-600 mb-6">
-                      {searchTerm || statusFilter !== 'all'
-                        ? 'Try adjusting your filters or search terms'
-                        : "You haven't placed any orders yet"}
-                    </p>
-                    <Link
-                      href="/shop"
-                      className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-                    >
-                      Start Shopping
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {currentOrders.map((order) => (
-                    <div key={order.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                      <div className="p-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-lg font-medium text-gray-900">
-                                Order #{order.number}
-                              </h3>
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                                {getStatusText(order.status)}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-600">
-                              Invoice: {order.invoice || '-'}
-                            </p>
-                          </div>
-                          <div className="text-right mt-4 sm:mt-0">
-                            <p className="text-lg font-medium text-gray-900">
-                              Rp {Number(order.total || 0).toLocaleString('id-ID')}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {new Date(order.date_created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <CreditCard size={16} /> {order.payment_method || '-'}
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <Package size={16} /> {order.line_items?.length || 0} item{order.line_items?.length > 1 ? 's' : ''}
-                          </div>
-                          <div className="flex gap-2">
-                            {order.status === 'pending' && order.payment_url && (
-                              <a
-                                href={order.payment_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-                              >
-                                Pay Now
-                              </a>
-                            )}
-                            <button
-                              onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
-                              className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
-                            >
-                              View
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* ORDER DETAILS */}
-                        {selectedOrder?.id === order.id && (
-                          <div className="mt-6 border rounded-lg bg-gray-50 overflow-hidden">
-
-                            {/* HEADER */}
-                            <div className="px-6 py-4 bg-white border-b">
-                              <h4 className="text-lg font-medium text-gray-900">
-                                Order #{order.number}
-                              </h4>
-                              <p className="text-sm text-gray-600">
-                                Invoice: {order.invoice || '-'}
-                              </p>
+                  {/* Orders List */}
+                  {loadingOrders ? (
+                    <div className="flex justify-center py-12">
+                      <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                    </div>
+                  ) : filteredOrders.length === 0 ? (
+                    <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+                      <Package className="mx-auto text-gray-400 mb-4" size={64} />
+                      <h3 className="text-xl font-medium text-gray-900 mb-2">No orders found</h3>
+                      <p className="text-gray-600 mb-6">
+                        {searchTerm || statusFilter !== 'all'
+                          ? 'Try adjusting your filters or search terms'
+                          : "You haven't placed any orders yet"}
+                      </p>
+                      <Link
+                        href="/shop"
+                        className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                      >
+                        Start Shopping
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {currentOrders.map((order) => (
+                        <div key={order.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                          <div className="p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                              <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h3 className="text-lg font-medium text-gray-900">
+                                    Order #{order.number}
+                                  </h3>
+                                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                                    {getStatusText(order.status)}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                  Invoice: {order.invoice || '-'}
+                                </p>
+                              </div>
+                              <div className="text-right mt-4 sm:mt-0">
+                                <p className="text-lg font-medium text-gray-900">
+                                  Rp {Number(order.total || 0).toLocaleString('id-ID')}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  {new Date(order.date_created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                </p>
+                              </div>
                             </div>
 
-                            {/* ITEMS */}
-                            <div className="divide-y">
-                              {order.line_items.map(item => (
-                                <div key={item.id} className="flex gap-4 p-6 bg-white">
+                            <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
+                              <div className="flex items-center gap-2 text-sm text-gray-600">
+                                <CreditCard size={16} /> {order.payment_method || '-'}
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-gray-600">
+                                <Package size={16} /> {order.line_items?.length || 0} item{order.line_items?.length > 1 ? 's' : ''}
+                              </div>
+                              <div className="flex gap-2">
+                                {order.status === 'pending' && order.payment_url && (
+                                  <a
+                                    href={order.payment_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                                  >
+                                    Pay Now
+                                  </a>
+                                )}
+                                <button
+                                  onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
+                                  className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                                >
+                                  View
+                                </button>
+                              </div>
+                            </div>
 
-                                  {/* IMAGE */}
-                                  {item.image?.src ? (
-                                    <img
-                                      src={item.image.src}
-                                      alt={item.name}
-                                      className="w-20 h-20 object-cover rounded border"
-                                    />
-                                  ) : (
-                                    <div className="w-20 h-20 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
-                                      No Image
+                            {/* ORDER DETAILS */}
+                            {selectedOrder?.id === order.id && (
+                              <div className="mt-6 border rounded-lg bg-gray-50 overflow-hidden">
+
+                                {/* HEADER */}
+                                <div className="px-6 py-4 bg-white border-b">
+                                  <h4 className="text-lg font-medium text-gray-900">
+                                    Order #{order.number}
+                                  </h4>
+                                  <p className="text-sm text-gray-600">
+                                    Invoice: {order.invoice || '-'}
+                                  </p>
+                                </div>
+
+                                {/* ITEMS */}
+                                <div className="divide-y">
+                                  {order.line_items.map(item => (
+                                    <div key={item.id} className="flex gap-4 p-6 bg-white">
+
+                                      {/* IMAGE */}
+                                      {item.image?.src ? (
+                                        <Image
+                                          src={item.image.src}
+                                          alt={item.name}
+                                          width={80}
+                                          height={80}
+                                          className="w-20 h-20 object-cover rounded border"
+                                        />
+                                      ) : (
+                                        <div className="w-20 h-20 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                                          No Image
+                                        </div>
+                                      )}
+
+                                      {/* INFO */}
+                                      <div className="flex-1">
+                                        <p className="font-medium text-gray-900">{item.name}</p>
+                                        <p className="text-sm text-gray-600">
+                                          Qty: {item.quantity}
+                                        </p>
+                                        <p className="text-sm text-gray-600">
+                                          Price: Rp {Number(item.price).toLocaleString('id-ID')}
+                                        </p>
+                                      </div>
+
+                                      {/* TOTAL */}
+                                      <div className="text-right font-medium text-gray-900">
+                                        Rp {Number(item.total).toLocaleString('id-ID')}
+                                      </div>
                                     </div>
-                                  )}
+                                  ))}
+                                </div>
 
-                                  {/* INFO */}
-                                  <div className="flex-1">
-                                    <p className="font-medium text-gray-900">{item.name}</p>
-                                    <p className="text-sm text-gray-600">
-                                      Qty: {item.quantity}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                      Price: Rp {Number(item.price).toLocaleString('id-ID')}
-                                    </p>
+                                {/* SUMMARY */}
+                                <div className="px-6 py-4 bg-gray-100 text-sm">
+                                  <div className="flex justify-between mb-2">
+                                    <span>Payment Method</span>
+                                    <span className="font-medium">{order.payment_method}</span>
                                   </div>
 
-                                  {/* TOTAL */}
-                                  <div className="text-right font-medium text-gray-900">
-                                    Rp {Number(item.total).toLocaleString('id-ID')}
+                                  <div className="flex justify-between mb-2">
+                                    <span>Status</span>
+                                    <span className="font-medium">{getStatusText(order.status)}</span>
+                                  </div>
+
+                                  <div className="flex justify-between border-t pt-2 mt-2 text-base font-semibold">
+                                    <span>Total</span>
+                                    <span>
+                                      Rp {Number(order.total).toLocaleString('id-ID')}
+                                    </span>
                                   </div>
                                 </div>
-                              ))}
-                            </div>
-
-                            {/* SUMMARY */}
-                            <div className="px-6 py-4 bg-gray-100 text-sm">
-                              <div className="flex justify-between mb-2">
-                                <span>Payment Method</span>
-                                <span className="font-medium">{order.payment_method}</span>
                               </div>
+                            )}
 
-                              <div className="flex justify-between mb-2">
-                                <span>Status</span>
-                                <span className="font-medium">{getStatusText(order.status)}</span>
-                              </div>
-
-                              <div className="flex justify-between border-t pt-2 mt-2 text-base font-semibold">
-                                <span>Total</span>
-                                <span>
-                                  Rp {Number(order.total).toLocaleString('id-ID')}
-                                </span>
-                              </div>
-                            </div>
                           </div>
-                        )}
+                        </div>
+                      ))}
 
-                      </div>
+                      {/* Pagination */}
+                      {filteredOrders.length > 3 && (
+                        <div className="flex justify-between mt-6">
+                          <button
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                          >
+                            Previous
+                          </button>
+                          <span className="text-gray-700">Page {currentPage} of {totalPages}</span>
+                          <button
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                          >
+                            Next
+                          </button>
+                        </div>
+                      )}
+
                     </div>
-                  ))}
-
-                  {/* Pagination */}
-                  {filteredOrders.length > 3 && (
-                  <div className="flex justify-between mt-6">
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-                    >
-                      Previous
-                    </button>
-                    <span className="text-gray-700">Page {currentPage} of {totalPages}</span>
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                      disabled={currentPage === totalPages}
-                      className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-                    >
-                      Next
-                    </button>
-                  </div>
-                )}
-
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
 
               {/* DOWNLOADS CONTENT (Placeholder) */}
               {activeTab === 'downloads' && (
@@ -594,8 +597,8 @@ export default function MyAccountPage() {
                         <a href="my-account/edit-address/" className="text-sm text-red-500 hover:text-black">Edit</a>
                       </header>
                       <address className="not-italic text-gray-600 text-sm">
-                        {user?.name}<br/>
-                        {user?.email}<br/>
+                        {user?.name}<br />
+                        {user?.email}<br />
                         You have not set up this type of address yet.
                       </address>
                     </div>
@@ -612,11 +615,10 @@ export default function MyAccountPage() {
                   {/* ALERT MESSAGE */}
                   {message.text && (
                     <div
-                      className={`p-4 mb-6 text-sm ${
-                        message.type === 'success'
+                      className={`p-4 mb-6 text-sm ${message.type === 'success'
                           ? 'bg-green-50 text-green-800'
                           : 'bg-red-50 text-red-800'
-                      }`}
+                        }`}
                     >
                       {message.text}
                     </div>
@@ -625,7 +627,7 @@ export default function MyAccountPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm mb-1">First name *</label>
-                        <input name="firstName"type="text" defaultValue={user?.firstName || user?.first_name} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
+                        <input name="firstName" type="text" defaultValue={user?.firstName || user?.first_name} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
                       </div>
                       <div>
                         <label className="block text-sm mb-1">Last name *</label>
@@ -642,7 +644,7 @@ export default function MyAccountPage() {
                       <input type="email" defaultValue={user?.email} className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-black" />
                     </div>
                     <button type="submit" disabled={isSubmitting} className="bg-black text-white px-6 py-3 rounded mt-4 hover:bg-gray-800 transition-colors disabled:bg-gray-400">
-                    {isSubmitting ? 'Saving...' : 'Save changes'}
+                      {isSubmitting ? 'Saving...' : 'Save changes'}
                     </button>
                   </form>
                 </div>
@@ -820,7 +822,7 @@ export default function MyAccountPage() {
         <h1 className="page-title">My account</h1>
 
         {redirectTo && (
-          <div className="error-message" style={{borderColor: '#0070e0', backgroundColor: '#eef7ff', color: '#005bb5'}}>
+          <div className="error-message" style={{ borderColor: '#0070e0', backgroundColor: '#eef7ff', color: '#005bb5' }}>
             Please login or register to continue.
           </div>
         )}
@@ -832,7 +834,7 @@ export default function MyAccountPage() {
         )}
 
         <div className="u-columns" id="customer_login">
-          
+
           {/* KOLOM KIRI: LOGIN */}
           <div className="u-column1">
             <div className="account-box">
@@ -880,18 +882,18 @@ export default function MyAccountPage() {
                 </p>
               </form>
             </div>
-            
+
             {/* Area Actions dibawah kotak abu-abu (Login only) */}
-            <div className="login-actions" style={{padding: '10px 0'}}>
-                <div className="remember-me">
-                  <label>
-                    <input type="checkbox" name="rememberme" id="rememberme" value="forever" />
-                    Remember me
-                  </label>
-                </div>
-                <Link href="/my-account/lost-password" className="lost-password-link">
-                  Lost your password?
-                </Link>
+            <div className="login-actions" style={{ padding: '10px 0' }}>
+              <div className="remember-me">
+                <label>
+                  <input type="checkbox" name="rememberme" id="rememberme" value="forever" />
+                  Remember me
+                </label>
+              </div>
+              <Link href="/my-account/lost-password" className="lost-password-link">
+                Lost your password?
+              </Link>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, ArrowUpDown } from "lucide-react";
 import ProductCard from "@/components/Product/ProductCard";
@@ -104,9 +105,11 @@ export default function ProductsGrid({ products = [], viewMode = "grid", onProdu
                 {compareItems.map(product => (
                   <div key={product.id} className="relative group">
                     <div className="w-12 h-12 bg-gray-50 rounded overflow-hidden border-2 border-transparent group-hover:border-blue-300 transition-colors">
-                      <img
+                      <Image
                         src={product.images?.[0]?.src || '/placeholder-product.jpg'}
                         alt={product.name}
+                        width={48}
+                        height={48}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -192,11 +195,10 @@ export default function ProductsGrid({ products = [], viewMode = "grid", onProdu
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 border rounded ${
-                  currentPage === page
+                className={`px-3 py-1 border rounded ${currentPage === page
                     ? "bg-black text-white"
                     : "bg-white hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 {page}
               </button>

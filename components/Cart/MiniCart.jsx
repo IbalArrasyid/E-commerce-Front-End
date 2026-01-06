@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShoppingCart,
@@ -105,9 +106,11 @@ export default function MiniCart({
                     >
                       {/* Product Image */}
                       <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0">
-                        <img
+                        <Image
                           src={item.images?.[0]?.src || '/placeholder-product.jpg'}
                           alt={item.name}
+                          width={64}
+                          height={64}
                           className="w-full h-full object-cover"
                         />
                       </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Search, X, Package } from 'lucide-react'
 import Link from 'next/link'
 
@@ -128,9 +129,11 @@ export default function SearchInput() {
                       title={item.name}
                       onClick={() => setIsSearchOpen(false)}
                     >
-                      <img
+                      <Image
                         src={item.images?.[0]?.src || '/placeholder.jpg'}
                         alt={item.name}
+                        width={56}
+                        height={56}
                         className="w-14 h-14 object-cover rounded"
                       />
 

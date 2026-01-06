@@ -1,15 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Photo Framases',
-};
-
 export default async function PhotoFramesPage() {
-  const { products, categoryId } = await getProducts('photo-frames', ['photo-frames'], 100);
+  const { products, categoryId } =
+    await getProductsByCategoryId(201, 24);
 
-  return <ProductsPage categoryId={categoryId} products={products} category="Photo Framases" />
+  return (
+    <ProductsPage
+      categoryId={categoryId}
+      products={products}
+      category="Photo Frames"
+    />
+  );
 }
-

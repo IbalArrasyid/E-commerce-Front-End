@@ -23,121 +23,121 @@ export default function FurniturePage() {
       href: '/furniture/living-room/sectional-sofas'
     },
     {
-        id: 'cleopatra-sofa',
-        name: 'Cleopatra Sofa',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/09/8.-DAYBED.jpg',
-        href: '/furniture/living-room/cleopatra-day-beds'
+      id: 'cleopatra-sofa',
+      name: 'Cleopatra Sofa',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/09/8.-DAYBED.jpg',
+      href: '/furniture/living-room/cleopatra-day-beds'
     },
     {
-        id: 'armchairs',
-        name: 'Armchairs',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-ARMCHAIR.jpg',
-        href: '/furniture/living-room/arm-chairs'
+      id: 'armchairs',
+      name: 'Armchairs',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-ARMCHAIR.jpg',
+      href: '/furniture/living-room/arm-chairs'
     },
     {
-        id: 'Sidetable',
-        name: 'Side Table',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/4.-SIDE-TABLE.jpg',
-        href: '/furniture/living-room/sidetable'
+      id: 'Sidetable',
+      name: 'Side Table',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/4.-SIDE-TABLE.jpg',
+      href: '/furniture/living-room/sidetable'
     },
     {
-        id: 'coffee-table',
-        name: 'Coffee Table',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/5.-COFFEE-TABLE.jpg',
-        href: '/furniture/living-room/coffee-table'
+      id: 'coffee-table',
+      name: 'Coffee Table',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/5.-COFFEE-TABLE.jpg',
+      href: '/furniture/living-room/coffee-table'
     },
     {
-        id: 'benchs',
-        name: 'Benchs',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/7.-BENCH.jpg',
-        href: '/furniture/living-room/benchs'
+      id: 'benchs',
+      name: 'Benchs',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/7.-BENCH.jpg',
+      href: '/furniture/living-room/benchs'
     },
     {
-        id: 'ottoman-pouf',
-        name: 'Ottoman & Pouf',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/6.-OTTOMAN-POUF.jpg',
-        href: '/furniture/living-room/ottoman-pouf'
+      id: 'ottoman-pouf',
+      name: 'Ottoman & Pouf',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/6.-OTTOMAN-POUF.jpg',
+      href: '/furniture/living-room/ottoman-pouf'
     },
     {
-        id: 'decorative-stools',
-        name: 'Decorative Stools',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/STOOL.jpg',
-        href: '/furniture/living-room/decorative-stools'
+      id: 'decorative-stools',
+      name: 'Decorative Stools',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/STOOL.jpg',
+      href: '/furniture/living-room/decorative-stools'
     },
     {
-        id: 'console-table',
-        name: 'Console Table',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-CONSOLE-TABLE.jpg',
-        href: '/furniture/living-room/console-table'
+      id: 'console-table',
+      name: 'Console Table',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-CONSOLE-TABLE.jpg',
+      href: '/furniture/living-room/console-table'
     },
     {
-        id: 'chest-of-drawers',
-        name: 'Chest of Drawers',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/4.-BUFFET.jpg',
-        href: '/furniture/living-room/chest-of-drawers'
+      id: 'chest-of-drawers',
+      name: 'Chest of Drawers',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/4.-BUFFET.jpg',
+      href: '/furniture/living-room/chest-of-drawers'
     },
     {
-        id: 'Sideboard-buffet',
-        name: 'Sideboard & buffet',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/8.-BUFFET.jpg',
-        href: '/furniture/living-room/buffet'
+      id: 'Sideboard-buffet',
+      name: 'Sideboard & buffet',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/8.-BUFFET.jpg',
+      href: '/furniture/living-room/buffet'
     },
     {
-        id: 'tv-stand',
-        name: 'TV Stand',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/9.-TV-STAND.jpg',
-        href: '/furniture/living-room/tv-stand'
+      id: 'tv-stand',
+      name: 'TV Stand',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/9.-TV-STAND.jpg',
+      href: '/furniture/living-room/tv-stand'
     },
     {
-        id: 'room-divider',
-        name: 'Room Divider',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/6.-ROOM-DIVIDERS.png',
-        href: '/furniture/living-room/room-divider'
+      id: 'room-divider',
+      name: 'Room Divider',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/6.-ROOM-DIVIDERS.png',
+      href: '/furniture/living-room/room-divider'
     }
   ]
 
   const shopByBedroom = [
-    { 
-        id: 'beds', 
-        name: 'Beds', 
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/1.-BED1.jpg', 
-        href: 'furniture/bedroom/beds' 
+    {
+      id: 'beds',
+      name: 'Beds',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/1.-BED1.jpg',
+      href: 'furniture/bedroom/beds'
     },
     {
-        id: 'headboards',
-        name: 'Headboards',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/2.-HEADBOARDS.jpg',
-        href: '/furniture/bedroom/headboards'
+      id: 'headboards',
+      name: 'Headboards',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/2.-HEADBOARDS.jpg',
+      href: '/furniture/bedroom/headboards'
     },
     {
-        id: 'Bedside-tables-nightstand',
-        name: 'Bedside Tables & Nightstand',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-BEDSIDE-NIGHTSTAND.jpg',
-        href: '/furniture/bedroom/bedside-nightstand'
+      id: 'Bedside-tables-nightstand',
+      name: 'Bedside Tables & Nightstand',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-BEDSIDE-NIGHTSTAND.jpg',
+      href: '/furniture/bedroom/bedside-nightstand'
     },
     {
-        id: "Make-up-dressing-tables",
-        name: 'Make Up & Dressing Tables',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/6.-MAKE-UP-TABLE.jpg',
-        href: '/furniture/bedroom/make-up-dressing-tables'
+      id: "Make-up-dressing-tables",
+      name: 'Make Up & Dressing Tables',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/6.-MAKE-UP-TABLE.jpg',
+      href: '/furniture/bedroom/make-up-dressing-tables'
     },
     {
-        id: 'Chests-of-drawers',
-        name: 'Chests of Drawers',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/ezgif.com-webp-to-png-2.png',
-        href: '/furniture/bedroom/chests-of-drawers'
+      id: 'Chests-of-drawers',
+      name: 'Chests of Drawers',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/ezgif.com-webp-to-png-2.png',
+      href: '/furniture/bedroom/chests-of-drawers'
     },
     {
-        id: 'TV Cabinets',
-        name: 'TV Cabinets',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/9.-TV-STAND.png',
-        href: '/furniture/bedroom/tv-cabinets'
+      id: 'TV Cabinets',
+      name: 'TV Cabinets',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/9.-TV-STAND.png',
+      href: '/furniture/bedroom/tv-cabinets'
     },
     {
-        id: 'Bed Benchs',
-        name: 'Bed Benchs',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/7.-BENCH.png',
-        href: '/furniture/bedroom/bed-benchs'
+      id: 'Bed Benchs',
+      name: 'Bed Benchs',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/7.-BENCH.png',
+      href: '/furniture/bedroom/bed-benchs'
     }
   ]
 
@@ -149,55 +149,55 @@ export default function FurniturePage() {
       href: '/furniture/dining-room/dining-tables'
     },
     {
-        id: 'dining-chairs',
-        name: 'Dining Chairs',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/2.-DINING-CHAIR.jpg',
-        href: '/furniture/dining-room/dining-chairs'
+      id: 'dining-chairs',
+      name: 'Dining Chairs',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/2.-DINING-CHAIR.jpg',
+      href: '/furniture/dining-room/dining-chairs'
     },
     {
-        id: 'bar-chairs-stools',
-        name: 'Bar Chairs & Stools',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-BAR-CHAIR.jpg',
-        href: '/furniture/dining-room/bar-chairs-stools'
+      id: 'bar-chairs-stools',
+      name: 'Bar Chairs & Stools',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/3.-BAR-CHAIR.jpg',
+      href: '/furniture/dining-room/bar-chairs-stools'
     },
     {
-        id: 'trolleys-bar-carts',
-        name: 'Trolleys & Bar Carts',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/TROLLEY.jpg',
-        href: '/furniture/dining-room/trolleys-bar-carts'
+      id: 'trolleys-bar-carts',
+      name: 'Trolleys & Bar Carts',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/TROLLEY.jpg',
+      href: '/furniture/dining-room/trolleys-bar-carts'
     },
     {
-        id: 'buffet-sideboards',
-        name: 'Buffet & Sideboards',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/ezgif.com-webp-to-png-1.png',
-        href: '/furniture/dining-room/buffet-sideboards'
+      id: 'buffet-sideboards',
+      name: 'Buffet & Sideboards',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/12/ezgif.com-webp-to-png-1.png',
+      href: '/furniture/dining-room/buffet-sideboards'
     }
   ]
 
   const shopByHomeOffice = [
     {
-        id: 'study-tables',
-        name: 'Study Tables',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/5.-STUDY-MAKEUP-TABLE.jpg',
-        href: '/furniture/home-office/study-tables'
+      id: 'study-tables',
+      name: 'Study Tables',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/5.-STUDY-MAKEUP-TABLE.jpg',
+      href: '/furniture/home-office/study-tables'
     },
     {
-        id: 'study-chairs',
-        name: 'Study Chairs',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/1.-OFFICE-CHAIR.jpg',
-        href: '/furniture/home-office/study-chairs'
+      id: 'study-chairs',
+      name: 'Study Chairs',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/1.-OFFICE-CHAIR.jpg',
+      href: '/furniture/home-office/study-chairs'
     },
     {
-        id: 'bookcases',
-        name: 'Bookcases',
-        image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/5.-BOOK-CASE.jpg',
-        href: '/furniture/home-office/bookcases'
+      id: 'bookcases',
+      name: 'Bookcases',
+      image: 'https://www.homedecorindonesia.com/wp-content/uploads/2023/06/5.-BOOK-CASE.jpg',
+      href: '/furniture/home-office/bookcases'
     }
   ]
 
-  const shopByAccents =[
+  const shopByAccents = [
     {
-        id: 'display-cabinet-chinoiserie',
+      id: 'display-cabinet-chinoiserie',
     }
   ]
 
@@ -485,164 +485,165 @@ export default function FurniturePage() {
 
   const whyChooseUsItems = [
     {
-        id: 'why-choose-us-1',
-        title: 'Quality & Durability',
-        content: 'We understand that furniture is an investment. That’s why each piece in our collection isn’t just aesthetically pleasing—it’s built to endure, ensuring that your investment is not only stylish but also long-lasting.'
+      id: 'why-choose-us-1',
+      title: 'Quality & Durability',
+      content: 'We understand that furniture is an investment. That’s why each piece in our collection isn’t just aesthetically pleasing—it’s built to endure, ensuring that your investment is not only stylish but also long-lasting.'
     },
     {
-        id: 'why-choose-us-2',
-        title: 'Tailored to Your Taste',
-        content: 'Your home should reflect your unique style, and we make that possible. Our wide range of upholstered furniture can be customized to your preferences. From dimensions to fabric choices, the options are nearly limitless.'
+      id: 'why-choose-us-2',
+      title: 'Tailored to Your Taste',
+      content: 'Your home should reflect your unique style, and we make that possible. Our wide range of upholstered furniture can be customized to your preferences. From dimensions to fabric choices, the options are nearly limitless.'
     },
     {
-        id: 'why-choose-us-3',
-        title: 'Extensive Fabric Collection',
-        content: 'We boast one of the region’s largest collections of upholstery fabrics, including exclusive designer selections. This vast array ensures that you’ll find the perfect match for your sofas, chairs, and decor.'
+      id: 'why-choose-us-3',
+      title: 'Extensive Fabric Collection',
+      content: 'We boast one of the region’s largest collections of upholstery fabrics, including exclusive designer selections. This vast array ensures that you’ll find the perfect match for your sofas, chairs, and decor.'
     },
     {
-        id: 'why-choose-us-4',
-        title: 'Expert Guidance',
-        content: 'Our experienced staff are more than salespeople—they’re advisors who will work with you to create the ideal sofa, sectional, or chair that fits seamlessly into your space. They’ll assist you in navigating our extensive range, considering your space requirements, aesthetic desires, and color palette.'
+      id: 'why-choose-us-4',
+      title: 'Expert Guidance',
+      content: 'Our experienced staff are more than salespeople—they’re advisors who will work with you to create the ideal sofa, sectional, or chair that fits seamlessly into your space. They’ll assist you in navigating our extensive range, considering your space requirements, aesthetic desires, and color palette.'
     },
     {
-        id: 'why-choose-us-5',
-        title: 'Reputation of Excellence',
-        content: 'Understanding that the beauty of wallpaper lies in its perfect application, we offer easy, professional installation services. Our team of skilled installers ensures a seamless and efficient process, from selecting the right wallpaper to achieving a flawless finish. This service is designed to eliminate any hassle for you, making the transformation of your space a convenient and enjoyable experience.'
+      id: 'why-choose-us-5',
+      title: 'Reputation of Excellence',
+      content: 'Understanding that the beauty of wallpaper lies in its perfect application, we offer easy, professional installation services. Our team of skilled installers ensures a seamless and efficient process, from selecting the right wallpaper to achieving a flawless finish. This service is designed to eliminate any hassle for you, making the transformation of your space a convenient and enjoyable experience.'
     },
     {
-        id: 'why-choose-us-6',
-        title: 'Spacious Jakarta Stores',
-        content: 'Visit our large stores in Central and South Jakarta for a hands-on experience with our furniture. Each showroom is filled with a wide variety of Indonesian designs, interior fabrics, and decor, allowing you to easily find and feel the quality of our products.'
+      id: 'why-choose-us-6',
+      title: 'Spacious Jakarta Stores',
+      content: 'Visit our large stores in Central and South Jakarta for a hands-on experience with our furniture. Each showroom is filled with a wide variety of Indonesian designs, interior fabrics, and decor, allowing you to easily find and feel the quality of our products.'
     }
   ]
 
   return (
     <main className="min-h-screen">
-        {/* Banner Section */}
-        <section className="relative h-[60vh] md:h-[80vh] overflow-hidden">
-            <Image
-                src="https://www.homedecorindonesia.com/wp-content/uploads/2025/05/1.-FURNITURE.jpg"
-                alt="Furniture Collection"
-                fill
-                className="object-cover object-center"
-                priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+      {/* Banner Section */}
+      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden">
+        <Image
+          src="https://www.homedecorindonesia.com/wp-content/uploads/2025/05/1.-FURNITURE.jpg"
+          alt="Furniture Collection"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
 
-            <div className="relative h-full flex items-center justify-center">
-                <div className="text-center text-white px-4 max-w-6xl mx-auto">
-                    <motion.h1
-                        className="text-4xl md:text-6xl lg:text-7xl font-light tracking-wider mb-6 leading-tight"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
-                    >
-                        Luxury and Modern Furniture <br />
-                    </motion.h1>
-
-                    <motion.div
-                        className="mt-8"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.3 }}
-                    >
-                        <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
-                            Discover timeless elegance and contemporary design in our curated collection of premium furniture
-                        </p>
-                    </motion.div>
-                </div>
-            </div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+        <div className="relative h-full flex items-center justify-center">
+          <div className="text-center text-white px-4 max-w-6xl mx-auto">
+            <motion.h1
+              className="text-4xl md:text-6xl lg:text-7xl font-light tracking-wider mb-6 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
             >
-                <div className="w-6 h-10 border-2 border-white/60 rounded-full flex justify-center">
-                    <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
-                </div>
-            </motion.div>
-        </section>
+              Luxury and Modern Furniture <br />
+            </motion.h1>
 
-        {/* Content Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3 }}
+            >
+              <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
+                Discover timeless elegance and contemporary design in our curated collection of premium furniture
+              </p>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-white/60 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Content Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         <ShopBySection
-            title="SHOP BY LIVING ROOM"
-            items={shopByLivingRoom}
+          title="SHOP BY LIVING ROOM"
+          items={shopByLivingRoom}
         />
         <ShopBySection
-            title="SHOP BY BEDROOM"
-            items={shopByBedroom}
+          title="SHOP BY BEDROOM"
+          items={shopByBedroom}
         />
         <ShopBySection
-            title="SHOP BY DINING ROOM"
-            items={shopByDiningRoom}
+          title="SHOP BY DINING ROOM"
+          items={shopByDiningRoom}
         />
         <ShopBySection
-            title="SHOP BY HOME OFFICE"
-            items={shopByHomeOffice}
+          title="SHOP BY HOME OFFICE"
+          items={shopByHomeOffice}
         />
 
         {/* Introduction Section */}
         <section className="text-left">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Discover Modern Furniture at Home Decor Indonesia
-            </h2>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
-                Where timeless tradition meets modern sensibilites in furniture design. We understand that modern living demands furniture that is not only aesthetically pleasing but also practical and durable.
-            </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Discover Modern Furniture at Home Decor Indonesia
+          </h2>
+          <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
+            Where timeless tradition meets modern sensibilites in furniture design. We understand that modern living demands furniture that is not only aesthetically pleasing but also practical and durable.
+          </p>
         </section>
 
         {/* Our Offerings Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left space-y-6">
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    Our Offerings
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                    At Home Decor Indonesia - Luxury Furniture Store, we offer a diverse range of home living furniture to suit any style and need. Our living room collection features comfortable and stylish sofas, sectional and corner sofas, and armchairs, perfect for relaxing and entertaining. For the bedroom, our beds and headboards are designed for the utmost comfort and style. Our dining room selection includes elegant, trending dining tables set and chairs, bar chairs, and trolleys & bar carts, ideal for both everyday use and special occasions. In the realm of home office furniture, we provide study tables and chairs that are both functional and fashionable, ensuring a productive and comfortable workspace. Our accents collection, including display cabinets and decorative stools, adds a unique touch to any room.
-                </p>
-            </div>
-            <div className="relative">
-                <img
-                    src="https://www.homedecorindonesia.com/wp-content/uploads/2024/06/homedecor8.jpeg"
-                    alt="Home Decor Indonesia Showroom"
-                    className="w-full h-auto rounded-lg shadow-lg"
-                />
-            </div>
+          <div className="text-left space-y-6">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Our Offerings
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              At Home Decor Indonesia - Luxury Furniture Store, we offer a diverse range of home living furniture to suit any style and need. Our living room collection features comfortable and stylish sofas, sectional and corner sofas, and armchairs, perfect for relaxing and entertaining. For the bedroom, our beds and headboards are designed for the utmost comfort and style. Our dining room selection includes elegant, trending dining tables set and chairs, bar chairs, and trolleys & bar carts, ideal for both everyday use and special occasions. In the realm of home office furniture, we provide study tables and chairs that are both functional and fashionable, ensuring a productive and comfortable workspace. Our accents collection, including display cabinets and decorative stools, adds a unique touch to any room.
+            </p>
+          </div>
+          <div className="relative aspect-[4/3]">
+            <Image
+              src="https://www.homedecorindonesia.com/wp-content/uploads/2024/06/homedecor8.jpeg"
+              alt="Home Decor Indonesia Showroom"
+              fill
+              className="object-cover rounded-lg shadow-lg"
+            />
+          </div>
         </section>
 
         {/* Why Choose Us Section */}
-            <section className="text-left">
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-                    Why Choose Us?
-                </h3>
-                <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
-                    At Home Decor Indonesia, we&apos;re more than just a luxury furniture store; we&apos;re a destination for quality, beauty, and unparalleled customization. Our commitment to excellence is evident in every piece of furniture we offer. Here&apos;s why we stand out:
-                </p>
-            </section>
-
-            <section>
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">Why Choose us?</h3>
-                <Accordion
-                items={whyChooseUsItems}
-                variant="luxurious"
-                allowMultiple={true}
-                />
-            </section>
-
-            {/* Most Popular Products Section */}
-        <section className="py-16 bg-gray-50">
-            <MostPopularProducts 
-              apiEndpoint="/api/products/popular"
-              itemsPerSlide={4}
-              autoPlay={true}
-            />
+        <section className="text-left">
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+            Why Choose Us?
+          </h3>
+          <p className="text-lg text-gray-600 leading-relaxed max-w-4xl">
+            At Home Decor Indonesia, we&apos;re more than just a luxury furniture store; we&apos;re a destination for quality, beauty, and unparalleled customization. Our commitment to excellence is evident in every piece of furniture we offer. Here&apos;s why we stand out:
+          </p>
         </section>
-        
-        </div>
+
+        <section>
+          <h3 className="text-2xl font-bold mb-6 text-gray-900">Why Choose us?</h3>
+          <Accordion
+            items={whyChooseUsItems}
+            variant="luxurious"
+            allowMultiple={true}
+          />
+        </section>
+
+        {/* Most Popular Products Section */}
+        <section className="py-16 bg-gray-50">
+          <MostPopularProducts
+            apiEndpoint="/api/products/popular"
+            itemsPerSlide={4}
+            autoPlay={true}
+          />
+        </section>
+
+      </div>
     </main>
   )
 }

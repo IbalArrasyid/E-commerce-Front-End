@@ -301,10 +301,13 @@ const InteractiveHotspot = ({
 
           return (
             <div key={imageIndex} className={`hotspot-container ${className}`}>
-              <img
+              <Image
                 src={image.src}
                 alt={image.alt}
+                width={600}
+                height={400}
                 className="hotspot-image"
+                style={{ width: '100%', height: 'auto' }}
               />
 
               {imageHotspots.map((hotspot, hotspotIndex) => {
@@ -320,15 +323,16 @@ const InteractiveHotspot = ({
                   >
                     <div className="hotspot"></div>
                     <div
-                      className={`tooltip tooltip-${globalIndex + 1} ${tooltipClass} ${
-                        isMobileOpen ? 'active' : ''
-                      }`}
+                      className={`tooltip tooltip-${globalIndex + 1} ${tooltipClass} ${isMobileOpen ? 'active' : ''
+                        }`}
                     >
                       <div className="tooltip-header">
                         {hotspot.productImage && (
-                          <img
+                          <Image
                             src={hotspot.productImage}
                             alt={hotspot.title}
+                            width={60}
+                            height={60}
                             className="tooltip-image"
                           />
                         )}

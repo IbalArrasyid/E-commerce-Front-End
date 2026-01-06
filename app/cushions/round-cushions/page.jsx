@@ -1,15 +1,17 @@
 import ProductsPage from "@/components/ProductsPage";
-import { getProducts } from "@/services/api";
+import { getProductsByCategoryId } from "@/services/api";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Round Cushions',
-};
-
 export default async function RoundCushionsPage() {
-  const { products, categoryId } = await getProducts('round-cushions', ['round-cushions'], 100);
+  const { products, categoryId } =
+    await getProductsByCategoryId(4054, 24);
 
-  return <ProductsPage categoryId={categoryId} products={products} category="Round Cushions" />
+  return (
+    <ProductsPage
+      categoryId={categoryId}
+      products={products}
+      category="Round Cushions"
+    />
+  );
 }
-

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -139,12 +140,13 @@ export default function CartSidebar({
                       transition={{ delay: index * 0.1 }}
                       className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
-                      {/* Product Info */}
                       <div className="flex gap-4">
                         <div className="w-20 h-20 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
+                          <Image
                             src={item.images?.[0]?.src || '/placeholder-product.jpg'}
                             alt={item.name}
+                            width={80}
+                            height={80}
                             className="w-full h-full object-cover"
                           />
                         </div>
